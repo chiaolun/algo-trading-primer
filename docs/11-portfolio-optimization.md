@@ -315,9 +315,8 @@ The practical fixes all inject humility about the estimates:
 - **Risk parity** sidesteps expected-return estimation entirely, sizing positions
   so each contributes *equal risk* — robust precisely because it does not trust
   $\mu$.
-- **Black–Litterman** starts from the market-implied equilibrium and lets you
-  tilt *gently* toward your views, instead of taking raw historical means at face
-  value.
+- **Constraints** — caps on individual weights, no-shorting, or limits on turnover —
+  bluntly prevent the optimizer from chasing noise into extreme positions.
 
 The throughline: trust your characterizations less than the math invites you to,
 especially the covariance matrix — whose worst failure is the subject of the final
