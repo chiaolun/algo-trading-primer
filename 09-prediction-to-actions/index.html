@@ -14,7 +14,7 @@
         <link rel="prev" href="../08-feature-engineering/">
       
       
-        <link rel="next" href="../10-capstone/">
+        <link rel="next" href="../10-homework/">
       
       
         
@@ -619,14 +619,41 @@
   
   
     <li class="md-nav__item">
-      <a href="../10-capstone/" class="md-nav__link">
+      <a href="../10-homework/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    10. Capstone system
+    10. Homework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../11-portfolio-optimization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    11. Portfolio optimization
   
 
     
@@ -859,7 +886,7 @@ when the market is about to move against you), and <strong>non-fill risk</strong
 you wanted never happens), all governed by your <strong>cancellation rules</strong>. Deciding
 where in the book to post to balance these is the central question in
 <a href="../sources/#cartea">Cartea et al.</a> and <a href="../sources/#harris">Harris</a>. The
-<a href="../10-capstone/#can-you-compare-market-order-and-limit-order-variants-of-the-same-signal">capstone</a>
+<a href="../10-homework/#can-you-compare-market-order-and-limit-order-variants-of-the-same-signal">homework</a>
 asks you to compare both order types on the same signal precisely because the
 trade-off is not obvious in advance.</p>
 <h2 id="what-should-the-execution-simulator-log">What should the execution simulator log?<a class="headerlink" href="#what-should-the-execution-simulator-log" title="Permanent link">&para;</a></h2>
@@ -881,7 +908,7 @@ must log a full audit trail for every decision and fill. At minimum:</p>
 <a href="../06-backtesting-engine/#what-state-should-the-backtester-maintain">state</a> the
 event-driven engine already maintains (<a href="../sources/#quantstart">QuantStart</a>). The
 feature-timestamp-versus-decision-timestamp pair is what lets you later produce the
-<a href="../10-capstone/#can-you-prove-the-system-does-not-use-future-data">no-future-data audit table</a>.</p>
+<a href="../10-homework/#can-you-prove-the-system-does-not-use-future-data">no-future-data audit table</a>.</p>
 <h2 id="how-do-you-evaluate-the-strategy-after-execution-costs">How do you evaluate the strategy after execution costs?<a class="headerlink" href="#how-do-you-evaluate-the-strategy-after-execution-costs" title="Permanent link">&para;</a></h2>
 <p>A strategy is only as good as its <strong>net</strong> performance, so evaluation must subtract
 every real cost and look beyond a single headline number. Compute:</p>
@@ -893,7 +920,9 @@ every real cost and look beyond a single headline number. Compute:</p>
 <li><strong>Fees and slippage</strong> — commissions, exchange fees, and the difference between
   decision price and fill price.</li>
 <li><strong>Drawdown</strong> — worst peak-to-trough loss, the survivability measure.</li>
-<li><strong>Sharpe-like statistics</strong> — risk-adjusted return.</li>
+<li><strong>Sharpe-like statistics</strong> — <a href="../11-portfolio-optimization/#why-risk-adjusted-return">risk-adjusted
+  return</a>, the standard way
+  to compare strategies on a common footing.</li>
 <li><strong>Hit rate and average win/loss</strong> — how often you're right and the payoff
   asymmetry.</li>
 <li><strong>Inventory exposure</strong> — how much risk you carried to earn the return.</li>
@@ -908,7 +937,7 @@ Net-of-cost evaluation is the honest test the whole pipeline has been building
 toward.</p>
 <hr />
 <p>Previous: <strong><a href="../08-feature-engineering/">← Feature engineering</a></strong> · Next:
-<strong><a href="../10-capstone/">Capstone system →</a></strong></p>
+<strong><a href="../10-homework/">Homework: build a standalone system →</a></strong></p>
 
 
 
@@ -961,13 +990,13 @@ toward.</p>
         
         
           
-          <a href="../10-capstone/" class="md-footer__link md-footer__link--next" aria-label="Next: 10. Capstone system">
+          <a href="../10-homework/" class="md-footer__link md-footer__link--next" aria-label="Next: 10. Homework">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                10. Capstone system
+                10. Homework
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -1008,6 +1037,10 @@ toward.</p>
     
     
       <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
       
     
   </body>

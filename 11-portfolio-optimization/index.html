@@ -1,0 +1,1361 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A self-study path to building a minimal, leakage-free futures backtester driven by a machine-learning signal.">
+      
+      
+      
+      
+        <link rel="prev" href="../10-homework/">
+      
+      
+        <link rel="next" href="../sources/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>11. Portfolio optimization - Algo Trading Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#11-portfolio-optimization-characterizing-combining-investments" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Algo Trading Wiki" class="md-header__button md-logo" aria-label="Algo Trading Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Algo Trading Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              11. Portfolio optimization
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Algo Trading Wiki" class="md-nav__button md-logo" aria-label="Algo Trading Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Algo Trading Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-market-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Market structure & auctions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-futures-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Futures contracts & expiries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-orders-and-execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Orders & execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-market-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Market data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-bars-and-aggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Bars & aggregation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-backtesting-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Backtesting engine design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-look-forward-bias/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Look-forward bias & leakage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-feature-engineering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. Feature engineering & regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-prediction-to-actions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. From prediction to actions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-homework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Homework
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    11. Portfolio optimization
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    11. Portfolio optimization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#part-a-characterizing-a-single-stream-valuing-them-against-each-other" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part A — Characterizing a single stream (valuing them against each other)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part A — Characterizing a single stream (valuing them against each other)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-risk-adjusted-return" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why risk-adjusted return?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-sharpe-ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Sharpe ratio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-probabilistic-sharpe-ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Probabilistic Sharpe Ratio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sharpes-cousins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sharpe's cousins
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-b-characterizing-what-a-stream-is-made-of-factor-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part B — Characterizing what a stream is made of (factor analysis)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part B — Characterizing what a stream is made of (factor analysis)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#factor-analysis-what-a-stream-is-made-of" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Factor analysis: what a stream is made of
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alpha-vs-beta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alpha vs. beta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-c-characterizing-how-streams-combine-reasoning-about-combining" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part C — Characterizing how streams combine (reasoning about combining)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part C — Characterizing how streams combine (reasoning about combining)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diversification-and-the-covariance-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diversification and the covariance matrix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#markowitz-mean-variance-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Markowitz mean-variance optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#marginal-sharpe-should-you-add-a-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Marginal Sharpe: should you add a strategy?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-mean-variance-optimization-is-fragile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why mean-variance optimization is fragile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-correlations-go-to-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When correlations go to one
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#part-a-characterizing-a-single-stream-valuing-them-against-each-other" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part A — Characterizing a single stream (valuing them against each other)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part A — Characterizing a single stream (valuing them against each other)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-risk-adjusted-return" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why risk-adjusted return?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-sharpe-ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Sharpe ratio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-probabilistic-sharpe-ratio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Probabilistic Sharpe Ratio
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sharpes-cousins" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sharpe's cousins
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-b-characterizing-what-a-stream-is-made-of-factor-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part B — Characterizing what a stream is made of (factor analysis)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part B — Characterizing what a stream is made of (factor analysis)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#factor-analysis-what-a-stream-is-made-of" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Factor analysis: what a stream is made of
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alpha-vs-beta" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Alpha vs. beta
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-c-characterizing-how-streams-combine-reasoning-about-combining" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Part C — Characterizing how streams combine (reasoning about combining)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part C — Characterizing how streams combine (reasoning about combining)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#diversification-and-the-covariance-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Diversification and the covariance matrix
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#markowitz-mean-variance-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Markowitz mean-variance optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#marginal-sharpe-should-you-add-a-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Marginal Sharpe: should you add a strategy?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#why-mean-variance-optimization-is-fragile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why mean-variance optimization is fragile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-correlations-go-to-one" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When correlations go to one
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="11-portfolio-optimization-characterizing-combining-investments">11. Portfolio optimization: characterizing &amp; combining investments<a class="headerlink" href="#11-portfolio-optimization-characterizing-combining-investments" title="Permanent link">&para;</a></h1>
+<p>The earlier sections build <strong>one</strong> strategy. Real money is run as a <strong>portfolio</strong>
+of many return streams — strategies, assets, factors — and the central question
+becomes: given a pile of candidate investments, how do you decide which are worth
+holding and how to combine them?</p>
+<p>The key idea underneath everything in this section is <strong>characterization</strong>:
+coming up with a <em>standard way to describe</em> an investment, so that you can</p>
+<ul>
+<li><strong>value investments against each other</strong> — is stream A better than stream B? — and</li>
+<li><strong>reason about combining them</strong> — what happens to risk and return when I hold
+  both?</li>
+</ul>
+<p>Once you can describe any return stream in a common language, comparison and
+combination become arithmetic. This section develops that language along three
+axes: how good a stream is <strong>on its own</strong>, what a stream is <strong>made of</strong>, and how
+streams <strong>combine</strong>.</p>
+<p>References: <a href="../sources/#markowitz">Markowitz</a>, <a href="../sources/#sharpe">Sharpe</a>,
+<a href="../sources/#psr">Bailey &amp; López de Prado</a>, <a href="../sources/#grinoldkahn">Grinold &amp;
+Kahn</a>, <a href="../sources/#ang">Ang</a>, and <a href="../sources/#lopezdeprado">López de
+Prado</a>.</p>
+<h2 id="part-a-characterizing-a-single-stream-valuing-them-against-each-other">Part A — Characterizing a single stream (valuing them against each other)<a class="headerlink" href="#part-a-characterizing-a-single-stream-valuing-them-against-each-other" title="Permanent link">&para;</a></h2>
+<h3 id="why-risk-adjusted-return">Why risk-adjusted return?<a class="headerlink" href="#why-risk-adjusted-return" title="Permanent link">&para;</a></h3>
+<p>A raw return number is meaningless without its risk. A stream that returned 30%
+by taking wild, near-ruinous swings is not obviously better than one that returned
+12% smoothly — and it is certainly not better <em>per unit of risk taken</em>. So the
+first job of characterization is to summarize a return stream by <strong>both</strong> its
+reward and its risk, and the overwhelmingly common choice is the <strong>mean and the
+standard deviation</strong> of its returns:</p>
+<ul>
+<li>the <strong>mean</strong> <span class="arithmatex">\(\mu = E[R]\)</span> stands in for reward, and</li>
+<li>the <strong>standard deviation</strong> <span class="arithmatex">\(\sigma = \sqrt{\operatorname{Var}(R)}\)</span> stands in for
+  risk.</li>
+</ul>
+<p>This <strong>mean-variance</strong> characterization is the foundation of modern portfolio
+theory (<a href="../sources/#markowitz">Markowitz</a>). It reduces an entire, complicated
+distribution of outcomes to two numbers — which is exactly what makes streams
+comparable and combinable.</p>
+<p>It is worth being honest about what this throws away. Standard deviation is a
+<strong>symmetric</strong> measure: it penalizes big <em>gains</em> as much as big <em>losses</em>, even
+though only the downside hurts. And it fully describes risk only when returns are
+roughly <strong>normal</strong> — but financial returns have <strong>fat tails</strong> and <strong>skew</strong>, so σ
+systematically <em>understates</em> the chance of extreme moves (a theme that returns
+with a vengeance under <a href="#when-correlations-go-to-one">crisis correlations</a>). The
+mean-variance summary is a starting language, not the last word — its cousins
+below (<a href="#sharpes-cousins">Sortino</a>) exist precisely to patch the symmetry flaw.</p>
+<h3 id="the-sharpe-ratio">The Sharpe ratio<a class="headerlink" href="#the-sharpe-ratio" title="Permanent link">&para;</a></h3>
+<p>The <strong>Sharpe ratio</strong> turns the two-number summary into a single, comparable score:
+reward per unit of risk, measured as <strong>excess return over the risk-free rate, per
+unit of standard deviation</strong> (<a href="../sources/#sharpe">Sharpe</a>):</p>
+<div class="arithmatex">\[ SR = \frac{E[R] - r_f}{\sigma_R} \]</div>
+<p>where <span class="arithmatex">\(r_f\)</span> is the risk-free rate. Subtracting <span class="arithmatex">\(r_f\)</span> matters because you should
+only get credit for return <em>above</em> what idle cash earns. A higher Sharpe means
+more reward for the risk borne, which is why it is the <strong>lingua franca</strong> for
+comparing return streams of different scales: a strategy doing ±2% a day and a
+bond fund doing ±0.1% a day can be placed on the same axis.</p>
+<p>Sharpe ratios are quoted <strong>annualized</strong> so they are comparable across measurement
+frequencies. If you estimate Sharpe from returns sampled <span class="arithmatex">\(N\)</span> times per year (≈252
+for daily), you scale by <span class="arithmatex">\(\sqrt{N}\)</span>:</p>
+<div class="arithmatex">\[ SR_{\text{annual}} = \sqrt{N}\; SR_{\text{per-period}} \]</div>
+<p>The <span class="arithmatex">\(\sqrt{N}\)</span> (not <span class="arithmatex">\(N\)</span>) comes from mean growing linearly with horizon while
+standard deviation grows with its square root. Keep the assumptions in view: the
+scaling assumes returns are roughly independent across periods (autocorrelation
+breaks it), and the ratio itself inherits σ's blind spots — a strategy that sells
+options can show a glorious Sharpe right up until the tail event that σ never saw
+coming.</p>
+<h3 id="the-probabilistic-sharpe-ratio">The Probabilistic Sharpe Ratio<a class="headerlink" href="#the-probabilistic-sharpe-ratio" title="Permanent link">&para;</a></h3>
+<p>A Sharpe ratio computed from data is an <strong>estimate</strong>, not the truth, and estimates
+have error bars. Two managers can report the same 1.5 Sharpe, but if one has ten
+years of daily data and the other has three months, you should believe them very
+differently. The <strong>Probabilistic Sharpe Ratio (PSR)</strong> makes that precise: instead
+of a point estimate, it reports the <strong>probability that the true Sharpe exceeds a
+benchmark</strong> <span class="arithmatex">\(SR^\*\)</span> (<a href="../sources/#psr">Bailey &amp; López de Prado</a>):</p>
+<div class="arithmatex">\[ \widehat{PSR}(SR^\*) = \Phi\!\left( \frac{(\widehat{SR} - SR^\*)\,\sqrt{n-1}}
+{\sqrt{1 - \hat\gamma_3 \widehat{SR} + \frac{\hat\gamma_4 - 1}{4}\widehat{SR}^2}} \right) \]</div>
+<p>where <span class="arithmatex">\(n\)</span> is the number of observations, <span class="arithmatex">\(\hat\gamma_3\)</span> the skew, <span class="arithmatex">\(\hat\gamma_4\)</span>
+the kurtosis, and <span class="arithmatex">\(\Phi\)</span> the normal CDF. Read it qualitatively: PSR <strong>rises</strong> with
+a longer track record (<span class="arithmatex">\(n\)</span>) and a higher observed Sharpe, and it <strong>falls</strong> when
+returns are negatively skewed or fat-tailed — i.e. it deflates the headline number
+exactly when σ was most likely lying about the risk.</p>
+<p>The natural extension is the <strong>Deflated Sharpe Ratio (DSR)</strong>, which additionally
+corrects for the fact that you tried <strong>many</strong> strategies and kept the best. The
+more configurations you test, the higher a Sharpe you expect to see <em>by luck
+alone</em>, so DSR raises the bar accordingly. This is the portfolio-level face of
+<a href="../07-look-forward-bias/#what-is-data-snooping-or-backtest-overfitting">data snooping and backtest
+overfitting</a>:
+PSR and DSR are how you defend a reported Sharpe against "you just got lucky."</p>
+<h3 id="sharpes-cousins">Sharpe's cousins<a class="headerlink" href="#sharpes-cousins" title="Permanent link">&para;</a></h3>
+<p>Two close relatives fix specific weaknesses of Sharpe and round out the
+single-stream toolkit:</p>
+<ul>
+<li>The <strong>Sortino ratio</strong> replaces total standard deviation with <strong>downside
+  deviation</strong> — the volatility of <em>negative</em> returns only:
+  <span class="arithmatex">\(\text{Sortino} = (E[R] - r_f) / \sigma_{\text{down}}\)</span>. It addresses Sharpe's
+  unfair penalty on upside volatility, rewarding strategies whose variability is
+  mostly to the good side.</li>
+<li>The <strong>Information ratio (IR)</strong> measures skill <em>relative to a benchmark</em>: active
+  return (the stream minus its benchmark) divided by <strong>tracking error</strong> (the
+  standard deviation of that active return), <span class="arithmatex">\(IR = \alpha / \omega\)</span>. It is the
+  natural score when the job is to <strong>beat an index</strong> rather than to earn an
+  absolute return, and it is central to the fundamental law of active management
+  (<a href="../sources/#grinoldkahn">Grinold &amp; Kahn</a>). The Information ratio also points
+  straight at the next axis: to define "active return" you must first say what the
+  benchmark exposure <em>is</em> — which is what factor analysis does.</li>
+</ul>
+<h2 id="part-b-characterizing-what-a-stream-is-made-of-factor-analysis">Part B — Characterizing what a stream is made of (factor analysis)<a class="headerlink" href="#part-b-characterizing-what-a-stream-is-made-of-factor-analysis" title="Permanent link">&para;</a></h2>
+<h3 id="factor-analysis-what-a-stream-is-made-of">Factor analysis: what a stream is made of<a class="headerlink" href="#factor-analysis-what-a-stream-is-made-of" title="Permanent link">&para;</a></h3>
+<p>Risk-adjusted return scores a stream in isolation, but it does not tell you <em>why</em>
+the stream moves — and two strategies with identical Sharpe ratios can be driven
+by completely different underlying bets. <strong>Factor analysis</strong> characterizes a
+return stream by <strong>decomposing it into exposures to common factors</strong> plus a
+leftover:</p>
+<div class="arithmatex">\[ R = \alpha + \sum_{k} \beta_k F_k + \varepsilon \]</div>
+<p>Each <span class="arithmatex">\(F_k\)</span> is a <strong>factor</strong> — a pervasive source of return such as the overall
+market, value-vs-growth, momentum, size, or a sector — and each <span class="arithmatex">\(\beta_k\)</span> is the
+stream's <strong>exposure</strong> (sensitivity) to that factor. The progression of richness:</p>
+<ul>
+<li><strong>CAPM</strong> uses a single factor, the market, so a stream is summarized by one
+  <strong>beta</strong> to the market.</li>
+<li><strong>Multi-factor models</strong> (e.g. Fama–French and its descendants) add value, size,
+  momentum, and more, describing the stream as a vector of betas.</li>
+<li><strong>Statistical / PCA factors</strong> let the factors themselves be <em>discovered</em> from the
+  covariance of many streams, rather than named in advance.</li>
+</ul>
+<p>The payoff is that factor analysis <strong>commoditizes risk</strong>: it expresses an
+arbitrary, idiosyncratic-looking return stream in a <em>standard basis</em> of exposures,
+so that two strategies can be compared in the same vocabulary ("this one is really
+a leveraged momentum bet; that one is short volatility"). It also feeds Part C —
+estimating the <a href="#diversification-and-the-covariance-matrix">covariance matrix</a>
+through a handful of factors is far more stable than estimating every pairwise
+correlation directly. <a href="../sources/#ang">Ang</a> and <a href="../sources/#grinoldkahn">Grinold &amp;
+Kahn</a> develop this view.</p>
+<h3 id="alpha-vs-beta">Alpha vs. beta<a class="headerlink" href="#alpha-vs-beta" title="Permanent link">&para;</a></h3>
+<p>The decomposition draws the most important line in active management. <strong>Beta</strong> is
+the part of your return explained by exposure to known factors — <em>commoditized,
+cheap, replicable</em> risk that anyone can buy through an index or a futures position.
+<strong>Alpha</strong> (<span class="arithmatex">\(\alpha\)</span>, the intercept) is what is left after stripping out every
+factor bet: genuinely idiosyncratic skill that cannot be obtained by simply
+holding a known exposure.</p>
+<p>This matters because <strong>you should not pay alpha fees for beta returns</strong>. A strategy
+that looks brilliant may, under factor analysis, turn out to be plain market beta
+in disguise — its apparent edge is a risk premium you could have rented cheaply.
+Characterizing a stream as alpha-plus-betas tells you what is truly novel, what is
+redundant with exposures you already hold, and what you are actually being
+compensated for.</p>
+<h2 id="part-c-characterizing-how-streams-combine-reasoning-about-combining">Part C — Characterizing how streams combine (reasoning about combining)<a class="headerlink" href="#part-c-characterizing-how-streams-combine-reasoning-about-combining" title="Permanent link">&para;</a></h2>
+<h3 id="diversification-and-the-covariance-matrix">Diversification and the covariance matrix<a class="headerlink" href="#diversification-and-the-covariance-matrix" title="Permanent link">&para;</a></h3>
+<p>To reason about <em>combining</em> streams you need one more piece of characterization:
+how they <strong>co-move</strong>. For a portfolio with weights <span class="arithmatex">\(w\)</span> over assets with expected
+returns <span class="arithmatex">\(\mu\)</span> and covariance matrix <span class="arithmatex">\(\Sigma\)</span>, the portfolio's mean and variance
+are</p>
+<div class="arithmatex">\[ \mu_p = w^\top \mu, \qquad \sigma_p^2 = w^\top \Sigma w. \]</div>
+<p>The second equation is where diversification lives. For two assets,</p>
+<div class="arithmatex">\[ \sigma_p^2 = w_1^2\sigma_1^2 + w_2^2\sigma_2^2 + 2 w_1 w_2 \rho_{12}\sigma_1\sigma_2, \]</div>
+<p>and the cross term shows that portfolio risk depends not just on the individual
+volatilities but on the <strong>correlation</strong> <span class="arithmatex">\(\rho_{12}\)</span>. Combine two streams with low
+or negative correlation and the portfolio's standard deviation comes in <em>below</em> the
+weighted average of the parts — you shed risk without giving up the average
+return. This risk reduction "for free" is the closest thing to a free lunch in
+finance, and the <strong>covariance matrix <span class="arithmatex">\(\Sigma\)</span> is the object that encodes it</strong>. It
+is also, as we will see, the object whose instability does the most damage.</p>
+<h3 id="markowitz-mean-variance-optimization">Markowitz mean-variance optimization<a class="headerlink" href="#markowitz-mean-variance-optimization" title="Permanent link">&para;</a></h3>
+<p><a href="../sources/#markowitz">Markowitz</a> mean-variance optimization (MVO) turns the
+characterization into an explicit optimization: choose the weights that <strong>minimize
+risk for a target return</strong> (or, equivalently, maximize return for a given risk):</p>
+<div class="arithmatex">\[ \min_{w}\; w^\top \Sigma w \quad \text{subject to} \quad w^\top \mu = \mu_p,
+\;\; \textstyle\sum_i w_i = 1. \]</div>
+<p>Sweeping the target <span class="arithmatex">\(\mu_p\)</span> traces out the <strong>efficient frontier</strong> — the set of
+portfolios with the best possible return for each level of risk; anything below it
+is dominated. Once a risk-free asset exists, the best portfolio of risky assets is
+the one where a line from <span class="arithmatex">\(r_f\)</span> is tangent to the frontier: the <strong>tangency
+portfolio</strong>, which is exactly the <strong>maximum-Sharpe</strong> portfolio. Every investor then
+holds some mix of the risk-free asset and that one tangency portfolio, tracing the
+<strong>Capital Market Line</strong>. This is the clean theoretical answer to "how do I
+combine?" — and the rest of this section is about why the clean answer misbehaves.</p>
+<h3 id="marginal-sharpe-should-you-add-a-strategy">Marginal Sharpe: should you add a strategy?<a class="headerlink" href="#marginal-sharpe-should-you-add-a-strategy" title="Permanent link">&para;</a></h3>
+<p>A practical combination question: you already run a portfolio, and a new candidate
+strategy lands on your desk. Should you add it? Its <strong>standalone Sharpe is the
+wrong test</strong> — what matters is its <strong>marginal</strong> contribution, i.e. how the
+<em>portfolio's</em> Sharpe changes once the new stream is mixed in. A new stream improves
+the portfolio when its own Sharpe beats the Sharpe you already have, <strong>scaled down
+by its correlation</strong> to the existing book. Roughly, adding asset <span class="arithmatex">\(i\)</span> raises the
+portfolio Sharpe when</p>
+<div class="arithmatex">\[ SR_i &gt; \rho_{i,p}\; SR_p, \]</div>
+<p>where <span class="arithmatex">\(\rho_{i,p}\)</span> is the correlation of the candidate with the current portfolio.
+The consequence is liberating: a <strong>mediocre but uncorrelated</strong> stream can be more
+valuable than an excellent but redundant one. A 0.5-Sharpe strategy that is
+<em>uncorrelated</em> with everything you hold improves the book; a 1.5-Sharpe strategy
+that is 0.95-correlated with what you already run adds almost nothing. This
+<strong>marginal contribution to risk</strong> view is how a desk decides what to onboard, and
+it is the combination-side analogue of the alpha-vs-beta question — both ask "what
+does this stream add that I don't already have?"</p>
+<h3 id="why-mean-variance-optimization-is-fragile">Why mean-variance optimization is fragile<a class="headerlink" href="#why-mean-variance-optimization-is-fragile" title="Permanent link">&para;</a></h3>
+<p>MVO is beautiful in theory and treacherous in practice, because it is an <strong>"error
+maximizer."</strong> Its inputs — expected returns <span class="arithmatex">\(\mu\)</span> and the covariance matrix
+<span class="arithmatex">\(\Sigma\)</span> — are <em>estimated</em> with considerable noise, and the optimizer responds to
+that noise pathologically: it piles weight onto whatever assets <em>happen</em> to look
+high-return or low-correlation in-sample, which are precisely the ones whose
+estimates are most likely inflated by luck. The result is extreme, unstable,
+concentrated weights that often perform terribly out of sample — the same
+<a href="../07-look-forward-bias/#what-is-data-snooping-or-backtest-overfitting">overfitting</a>
+disease, now in portfolio-weight form. Expected returns are especially hard to
+estimate, so naive MVO weights swing violently with tiny changes in <span class="arithmatex">\(\mu\)</span>.</p>
+<p>The practical fixes all inject humility about the estimates:</p>
+<ul>
+<li><strong>Shrinkage</strong> (e.g. Ledoit–Wolf) pulls the noisy sample covariance toward a
+  simple, stable target, taming the wild weights.</li>
+<li><strong>Risk parity</strong> sidesteps expected-return estimation entirely, sizing positions
+  so each contributes <em>equal risk</em> — robust precisely because it does not trust
+  <span class="arithmatex">\(\mu\)</span>.</li>
+<li><strong>Black–Litterman</strong> starts from the market-implied equilibrium and lets you
+  tilt <em>gently</em> toward your views, instead of taking raw historical means at face
+  value.</li>
+</ul>
+<p>The throughline: trust your characterizations less than the math invites you to,
+especially the covariance matrix — whose worst failure is the subject of the final
+question.</p>
+<h3 id="when-correlations-go-to-one">When correlations go to one<a class="headerlink" href="#when-correlations-go-to-one" title="Permanent link">&para;</a></h3>
+<p>Every diversification argument in Part C rests on the correlations in <span class="arithmatex">\(\Sigma\)</span>
+being <strong>stable</strong>. They are not. In a crisis — 1987, 2008, March 2020 — the
+diversifying correlations that justified the portfolio <strong>spike toward 1</strong>: assets
+that normally move independently all crash together as investors flee risk
+indiscriminately and sell whatever they can. This <strong>tail dependence</strong> means the
+correlation matrix you estimated in calm markets describes a different world than
+the one you face when it matters, and the risk reduction you counted on
+<strong>evaporates exactly when you need it most.</strong></p>
+<p>This is the deepest caveat of the whole section: the mean-variance characterization
+is a calm-weather instrument, and its single number for "how these move together"
+hides a regime switch. The defensive lessons follow directly — <strong>stress-test</strong>
+portfolios under crisis-correlation assumptions rather than historical-average
+ones; never trust a single covariance estimate; size for the
+<a href="../09-prediction-to-actions/#how-do-you-evaluate-the-strategy-after-execution-costs">drawdowns</a>
+you would suffer if correlations went to 1; and remember that fat tails and crisis
+co-movement are the recurring ways that a tidy σ-based story understates real
+risk. Characterization makes investments comparable and combinable — but only as
+far as the description holds, and in a crisis the description breaks.</p>
+<hr />
+<p>Previous: <strong><a href="../10-homework/">← Homework</a></strong> · Back to <strong><a href="../">Home</a></strong> · Go
+deeper with the <strong><a href="../sources/">Sources</a></strong>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../10-homework/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 10. Homework">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                10. Homework
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../sources/" class="md-footer__link md-footer__link--next" aria-label="Next: Sources">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Sources
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "content.code.copy", "toc.follow", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../javascripts/mathjax.js"></script>
+      
+        <script src="https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>
