@@ -865,6 +865,58 @@ improvement</strong>. The limit only bites as a ceiling: it stops the order from
 your limit rather than paying through it. In this sense a limit order that crosses
 the spread is a <a href="#what-is-a-market-order">market order</a> with a built-in slippage
 cap — immediacy when the price is acceptable, protection when it is not.</p>
+<figure style="margin:1.5rem 0;width:100%">
+<svg viewBox="0 0 680 280" role="img" aria-label="Animation of a crossing buy limit order filling below its limit price and resting the remainder at the cap" style="width:100%;height:auto;display:block;color:var(--md-default-fg-color)">
+  <title>A crossing limit order fills better than its limit, and the cap protects the far offers</title>
+  <style>
+    .mkcl-stage{animation:mkcl-stage 10s infinite}
+    .mkcl-bar{transform-box:fill-box;transform-origin:left center}
+    .mkcl-b3{animation:mkcl-b3 10s infinite}.mkcl-b4{animation:mkcl-b4 10s infinite}
+    .mkcl-arrow{animation:mkcl-arrow 10s infinite}
+    .mkcl-n3{animation:mkcl-n3 10s infinite}.mkcl-n4{animation:mkcl-n4 10s infinite}
+    .mkcl-f1{animation:mkcl-f1 10s infinite}.mkcl-f2{animation:mkcl-f2 10s infinite}
+    .mkcl-rest{animation:mkcl-rest 10s infinite}.mkcl-prot{animation:mkcl-prot 10s infinite}.mkcl-sum{animation:mkcl-sum 10s infinite}
+    @keyframes mkcl-stage{0%,86%{opacity:1}90%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes mkcl-b3{0%,16%{transform:scaleX(1)}28%,89%{transform:scaleX(0)}92%,100%{transform:scaleX(1)}}
+    @keyframes mkcl-b4{0%,32%{transform:scaleX(1)}46%,89%{transform:scaleX(0)}92%,100%{transform:scaleX(1)}}
+    @keyframes mkcl-arrow{0%,28%{transform:translateY(0)}34%,46%{transform:translateY(-40px)}52%,86%{transform:translateY(-80px)}92%,100%{transform:translateY(0)}}
+    @keyframes mkcl-n3{0%,16%{opacity:1}28%,90%{opacity:0}93%,100%{opacity:1}}
+    @keyframes mkcl-n4{0%,32%{opacity:1}46%,90%{opacity:0}93%,100%{opacity:1}}
+    @keyframes mkcl-f1{0%,16%{opacity:0}22%,86%{opacity:1}90%,100%{opacity:0}}
+    @keyframes mkcl-f2{0%,32%{opacity:0}38%,86%{opacity:1}90%,100%{opacity:0}}
+    @keyframes mkcl-rest{0%,50%{opacity:0}58%,86%{opacity:1}90%,100%{opacity:0}}
+    @keyframes mkcl-prot{0%,50%{opacity:0}56%,86%{opacity:1}90%,100%{opacity:0}}
+    @keyframes mkcl-sum{0%,64%{opacity:0}70%,86%{opacity:1}90%,100%{opacity:0}}
+    @media (prefers-reduced-motion:reduce){.mkcl-stage,.mkcl-b3,.mkcl-b4,.mkcl-arrow,.mkcl-n3,.mkcl-n4,.mkcl-f1,.mkcl-f2,.mkcl-rest,.mkcl-prot,.mkcl-sum{animation:none}}
+  </style>
+  <g class="mkcl-stage">
+    <text x="340" y="20" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">BUY LIMIT 200 lots, limit 100.05 — it crosses the spread (best ask 100.03)</text>
+    <g font-size="13" font-weight="600" text-anchor="end">
+      <text x="120" y="68" fill="#e5484d">100.06</text>
+      <text x="120" y="108" fill="#6366f1">100.05</text>
+      <text x="120" y="148" fill="#e5484d">100.04</text>
+      <text x="120" y="188" fill="#e5484d">100.03</text>
+    </g>
+    <line x1="130" y1="104" x2="470" y2="104" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.7"/>
+    <text x="475" y="108" font-size="11.5" font-weight="600" fill="#6366f1">your limit 100.05 (cap)</text>
+    <rect x="140" y="52" width="150" height="24" fill="#e5484d" opacity="0.3"/><text x="150" y="68" font-size="12" fill="currentColor">60</text>
+    <rect class="mkcl-bar mkcl-b4" x="140" y="132" width="225" height="24" fill="#e5484d" opacity="0.3"/><text class="mkcl-n4" x="150" y="148" font-size="12" fill="currentColor">90</text>
+    <rect class="mkcl-bar mkcl-b3" x="140" y="172" width="175" height="24" fill="#e5484d" opacity="0.3"/><text class="mkcl-n3" x="150" y="188" font-size="12" fill="currentColor">70</text>
+    <g class="mkcl-rest" opacity="0"><rect x="140" y="92" width="100" height="24" fill="#2ca35e" opacity="0.45" stroke="#2ca35e"/><text x="150" y="108" font-size="12" font-weight="600" fill="currentColor">40</text><text x="246" y="108" font-size="11.5" fill="#2ca35e">← 40 rests at your limit</text></g>
+    <g class="mkcl-arrow" fill="#0ea5e9"><path d="M124,177 L124,191 L138,184 Z"/></g>
+    <text class="mkcl-f1" opacity="0" x="380" y="188" font-size="12.5" fill="currentColor">✓ 70 @ 100.03 — better than your cap</text>
+    <text class="mkcl-f2" opacity="0" x="380" y="148" font-size="12.5" fill="currentColor">✓ 90 @ 100.04</text>
+    <text class="mkcl-prot" opacity="0" x="300" y="68" font-size="11.5" font-weight="600" fill="currentColor">100.06 is above the cap — never paid</text>
+    <text class="mkcl-sum" opacity="0" x="140" y="262" font-size="12.5" font-weight="600" fill="currentColor">Filled 160 @ avg 100.036 — better than the 100.05 limit; 40 rests at 100.05, 100.06 untouched</text>
+  </g>
+</svg>
+<figcaption style="font-size:0.8rem;opacity:0.8">A 200-lot buy limit capped at 100.05 crosses the spread. It takes 70 at 100.03 and
+90 at 100.04 — both <em>better</em> than the 100.05 limit (price improvement). With no
+more liquidity at or below the cap, the order stops: the remaining 40 <strong>rests</strong>
+at 100.05 rather than paying the 100.06 offer, which the cap leaves untouched. (Loops;
+respects reduced-motion.)</figcaption>
+</figure>
+
 <p>The costs are subtler than a market order's:</p>
 <ul>
 <li><strong>Queue position / non-execution risk.</strong> A resting limit order only fills when
