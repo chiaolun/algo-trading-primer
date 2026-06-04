@@ -98,6 +98,16 @@ execution, VWAP schedules, pairs trading, and dark pools.
   <https://assets.cambridge.org/97811070/91146/frontmatter/9781107091146_frontmatter.pdf>
 - Overview: <https://books.google.nl/books?id=5dMmCgAAQBAJ>
 
+### Gârleanu & Pedersen — *Dynamic Trading with Predictable Returns and Transaction Costs* {#garleanu-pedersen}
+
+For turning [predictions into
+positions](09-prediction-to-actions.md#how-does-a-prediction-become-a-position) when
+trading is costly: the optimal policy trades *partially* toward an "aim portfolio"
+that weights each signal by its persistence, rather than jumping to the static
+optimum. *Journal of Finance* (2013).
+
+- <https://www.aqr.com/Insights/Research/Journal-Article/Dynamic-Trading-With-Predictable-Returns-and-Transactions-Costs>
+
 ### Stefan Jansen, *Machine Learning for Algorithmic Trading* {#jansen}
 
 For the Python ML workflow: [feature

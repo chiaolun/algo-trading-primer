@@ -33,6 +33,17 @@ enough to capture edge but stable enough not to be eaten by trading costs.
 [CS 7646](sources.md#cs7646) and [Jansen](sources.md#jansen) both treat this
 forecast-to-position step.
 
+A rigorous version of this trade-off is worked out by [Gârleanu and
+Pedersen](sources.md#garleanu-pedersen): when trading is costly, the optimal policy
+is *not* to jump to the current [Markowitz-optimal](11-portfolio-optimization.md#markowitz-mean-variance-optimization)
+position but to take a **partial step** toward an *aim portfolio* each period. The
+aim is not today's static optimum but a forward-looking blend that weights each
+predictive signal by its **persistence** — trade hard toward edges that will still
+be there tomorrow (slow-decaying signals) and only lightly toward fast-decaying ones
+whose alpha would be gone before you finished paying to capture it. The size of the
+step trades expected alpha and risk against transaction costs, which is the
+principled generalization of the static no-trade band above.
+
 ## How does a target position become orders?
 
 Orders come from the **difference** between your current position and your target
