@@ -333,6 +333,31 @@ correlation matrix you estimated in calm markets describes a different world tha
 the one you face when it matters, and the risk reduction you counted on
 **evaporates exactly when you need it most.**
 
+Here the two covariance estimators from [factor analysis](#what-it-means-for-a-factor-model-to-work)
+behave very differently, and the factor-derived one is far better equipped to *model*
+this behavior. The **sample covariance** is just a backward-looking average of
+realized co-movement: it has no structural handle on "all correlations rise
+together," so it cannot represent the regime until it has actually lived through the
+crisis, and even then a calm trailing window dilutes the spike. The
+**factor-derived covariance** $\Sigma = B\,\Sigma_f\,B^\top + D$ — loadings $B$, a
+small factor covariance $\Sigma_f$, and diagonal idiosyncratic variances $D$ — has
+the crisis mechanism built in. Correlations going to 1 *is* the systematic factor's
+variance swamping idiosyncratic risk: for two assets that both load on a common
+factor with variance $\sigma_f^2$,
+
+$$ \operatorname{Corr}(r_1, r_2) = \frac{\beta_1\beta_2\,\sigma_f^2}
+{\sqrt{(\beta_1^2\sigma_f^2 + \sigma_{\varepsilon_1}^2)(\beta_2^2\sigma_f^2 + \sigma_{\varepsilon_2}^2)}}
+\;\xrightarrow[\;\sigma_f^2 \to \infty\;]{}\; 1. $$
+
+As the common factor's volatility explodes, the idiosyncratic terms $\sigma_\varepsilon^2$
+become negligible and the implied correlation between any two assets with same-sign
+loadings is driven to 1 — exactly the flight-to-risk-off behavior, where everything
+is suddenly dominated by one systematic shock. So a factor model lets you **stress
+this regime with a single knob**: scale up the factor variance and watch the whole
+correlation matrix migrate toward 1, coherently and across every pair at once,
+without re-estimating thousands of pairwise correlations. The sample covariance
+offers no such lever.
+
 This is the deepest caveat of the whole section: the mean-variance characterization
 is a calm-weather instrument, and its single number for "how these move together"
 hides a regime switch. The defensive lessons follow directly — **stress-test**
