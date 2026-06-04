@@ -687,6 +687,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#what-it-means-for-a-factor-model-to-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it means for a factor model to work
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -914,6 +925,17 @@
     <span class="md-ellipsis">
       
         Alpha vs. beta
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-it-means-for-a-factor-model-to-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What it means for a factor model to work
       
     </span>
   </a>
@@ -1158,6 +1180,57 @@ in disguise — its apparent edge is a risk premium you could have rented cheapl
 Characterizing a stream as alpha-plus-betas tells you what is truly novel, what is
 redundant with exposures you already hold, and what you are actually being
 compensated for.</p>
+<h3 id="what-it-means-for-a-factor-model-to-work">What it means for a factor model to work<a class="headerlink" href="#what-it-means-for-a-factor-model-to-work" title="Permanent link">&para;</a></h3>
+<p>So far Part B has treated factor analysis as a way to <em>describe</em> a stream. But the
+decomposition also changes how you <em>estimate</em> the quantity Part C needs most — the
+covariance between assets — and working through that estimation is the clearest way
+to say what it means for a factor model to "work."</p>
+<p>Take two assets with returns <span class="arithmatex">\(r_1\)</span> and <span class="arithmatex">\(r_2\)</span>, and suppose you want their covariance
+<span class="arithmatex">\(\sigma_{12}\)</span>. There are two ways to get it.</p>
+<p><strong>Estimate it directly.</strong> Compute the sample covariance straight from the two return
+series:</p>
+<div class="arithmatex">\[ \hat\sigma_{12} = \frac{1}{T-1}\sum_{t=1}^{T}(r_{1,t}-\bar r_1)(r_{2,t}-\bar r_2). \]</div>
+<p>This estimator is <strong>unbiased</strong>: whatever the true data-generating process, its
+expectation equals the true covariance, and as <span class="arithmatex">\(T\to\infty\)</span> it converges to the
+truth. It assumes nothing about how the assets are related. Its weakness is
+<strong>variance</strong> — with a realistic sample length it is noisy, because it leans on those
+two series alone and on however many observations you happen to have. Scaled up to
+<span class="arithmatex">\(N\)</span> assets, the full sample covariance matrix has <span class="arithmatex">\(N(N+1)/2\)</span> free parameters, each
+estimated from limited data; the noise compounds, and the matrix becomes
+ill-conditioned (even non-invertible) when <span class="arithmatex">\(T\)</span> is not comfortably larger than <span class="arithmatex">\(N\)</span>.</p>
+<p><strong>Estimate it through the factor model.</strong> Posit <span class="arithmatex">\(r_i = \alpha_i + \beta_i^\top f +
+\varepsilon_i\)</span>, with shared factors <span class="arithmatex">\(f\)</span> (covariance <span class="arithmatex">\(\Sigma_f\)</span>) and idiosyncratic
+residuals <span class="arithmatex">\(\varepsilon_i\)</span> that are <em>assumed uncorrelated across assets</em>. Under that
+structure the covariance collapses to</p>
+<div class="arithmatex">\[ \sigma_{12} = \beta_1^\top \Sigma_f\, \beta_2. \]</div>
+<p>So you estimate each asset's loadings <span class="arithmatex">\(\hat\beta_1, \hat\beta_2\)</span> <strong>individually</strong> (one
+regression per asset), estimate the factor covariance <span class="arithmatex">\(\hat\Sigma_f\)</span> <strong>once</strong> — from
+the factor history, shared across every asset — and multiply. This estimator has
+<strong>much lower variance</strong>: it fits only a handful of loadings per asset plus one
+shared, precisely-estimated factor covariance, instead of a free parameter for every
+pair, and it pools information across all assets and a long factor history. But it is
+<strong>biased</strong>: the assumption that residuals are uncorrelated is never exactly true (two
+oil producers share an oil-price risk the market factor misses; loadings drift over
+time; the factor set is incomplete), so the model-implied covariance is
+systematically off by whatever real co-movement the factors fail to capture.</p>
+<p><strong>This is the bias–variance tradeoff</strong>, in covariance-estimation form. The direct
+sample covariance is the <strong>zero-bias, high-variance</strong> estimator; the factor estimate
+deliberately accepts a little bias to buy a large reduction in variance. A factor
+model <strong>works</strong> precisely when that trade is favorable — when the bias it introduces
+is <em>small relative to the variance it removes</em>, so the model-implied covariance is
+<strong>closer to the truth out of sample</strong> than the raw sample number, even though the
+sample number is the one that is technically unbiased. Equivalently, it works when
+the residuals really are <em>mostly</em> uncorrelated once the common factors are accounted
+for: the co-movement the factor estimate throws away is then mostly noise, not
+signal. It <strong>fails</strong> when the discarded structure is large — a missing factor, or a
+genuine residual correlation big enough that the bias swamps the variance you saved.</p>
+<p>This is also why the <a href="#why-mean-variance-optimization-is-fragile">robust covariance
+fixes</a> in Part C exist. <strong>Shrinkage</strong>
+(Ledoit–Wolf) interpolates between exactly these two poles — it blends the
+unbiased-but-noisy sample covariance with a biased-but-stable structured target
+(often a factor or constant-correlation model), choosing the mix that minimizes total
+estimation error. The factor model sits at one end of that spectrum and the sample
+covariance at the other; the bias–variance tradeoff is the axis running between them.</p>
 <h2 id="part-c-characterizing-how-streams-combine-reasoning-about-combining">Part C — Characterizing how streams combine (reasoning about combining)<a class="headerlink" href="#part-c-characterizing-how-streams-combine-reasoning-about-combining" title="Permanent link">&para;</a></h2>
 <h3 id="diversification-and-the-covariance-matrix">Diversification and the covariance matrix<a class="headerlink" href="#diversification-and-the-covariance-matrix" title="Permanent link">&para;</a></h3>
 <p>To reason about <em>combining</em> streams you need one more piece of characterization:
