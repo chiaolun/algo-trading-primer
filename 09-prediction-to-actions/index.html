@@ -832,6 +832,16 @@ have right now. The mapping typically combines:</p>
 enough to capture edge but stable enough not to be eaten by trading costs.
 <a href="../sources/#cs7646">CS 7646</a> and <a href="../sources/#jansen">Jansen</a> both treat this
 forecast-to-position step.</p>
+<p>A rigorous version of this trade-off is worked out by <a href="../sources/#garleanu-pedersen">Gârleanu and
+Pedersen</a>: when trading is costly, the optimal policy
+is <em>not</em> to jump to the current <a href="../11-portfolio-optimization/#markowitz-mean-variance-optimization">Markowitz-optimal</a>
+position but to take a <strong>partial step</strong> toward an <em>aim portfolio</em> each period. The
+aim is not today's static optimum but a forward-looking blend that weights each
+predictive signal by its <strong>persistence</strong> — trade hard toward edges that will still
+be there tomorrow (slow-decaying signals) and only lightly toward fast-decaying ones
+whose alpha would be gone before you finished paying to capture it. The size of the
+step trades expected alpha and risk against transaction costs, which is the
+principled generalization of the static no-trade band above.</p>
 <h2 id="how-does-a-target-position-become-orders">How does a target position become orders?<a class="headerlink" href="#how-does-a-target-position-become-orders" title="Permanent link">&para;</a></h2>
 <p>Orders come from the <strong>difference</strong> between your current position and your target
 position. If you hold +2 and want +5, you must buy 3; if you hold +2 and want 0,
