@@ -74,6 +74,93 @@ These terms describe the top of the order book at any instant:
   toward either side.
 - The **inside market** (or top of book / BBO — best bid and offer) is the best
   bid together with the best ask.
+- The **tick size** is the smallest increment by which the price may move — the
+  spacing between adjacent rungs of the ladder below.
+
+Traders visualize all of this as a **price ladder** (or depth-of-market): price
+levels stacked vertically, with resting bid sizes on one side and ask sizes on the
+other.
+
+<figure style="margin:1.5rem auto;text-align:center">
+<svg viewBox="0 0 720 400" role="img" aria-label="A price ladder showing bids, asks, the spread, the midprice and the tick size" style="max-width:100%;height:auto;color:var(--md-default-fg-color)">
+  <title>Price ladder: bids, asks, spread, midprice and tick size</title>
+  <!-- column headers -->
+  <g fill="currentColor" font-size="12.5" opacity="0.7" text-anchor="middle">
+    <text x="245" y="56">Bids — buy orders</text>
+    <text x="370" y="56">Price</text>
+    <text x="495" y="56">Asks — sell orders</text>
+  </g>
+  <!-- ladder frame + dividers -->
+  <rect x="170" y="70" width="400" height="280" fill="none" stroke="currentColor" stroke-width="1" opacity="0.25"/>
+  <g stroke="currentColor" stroke-width="1" opacity="0.12">
+    <line x1="320" y1="70" x2="320" y2="350"/><line x1="420" y1="70" x2="420" y2="350"/>
+    <line x1="170" y1="110" x2="570" y2="110"/><line x1="170" y1="150" x2="570" y2="150"/>
+    <line x1="170" y1="190" x2="570" y2="190"/><line x1="170" y1="230" x2="570" y2="230"/>
+    <line x1="170" y1="270" x2="570" y2="270"/><line x1="170" y1="310" x2="570" y2="310"/>
+  </g>
+  <!-- best ask / best bid row highlights -->
+  <rect x="170" y="150" width="400" height="40" fill="#e5484d" opacity="0.10"/>
+  <rect x="170" y="150" width="3" height="40" fill="#e5484d"/>
+  <rect x="170" y="230" width="400" height="40" fill="#2ca35e" opacity="0.10"/>
+  <rect x="170" y="230" width="3" height="40" fill="#2ca35e"/>
+  <!-- ask size bars -->
+  <g fill="#e5484d" opacity="0.30">
+    <rect x="420" y="81" width="45" height="18"/><rect x="420" y="121" width="82.5" height="18"/>
+    <rect x="420" y="161" width="56.25" height="18"/>
+  </g>
+  <!-- bid size bars -->
+  <g fill="#2ca35e" opacity="0.30">
+    <rect x="252.5" y="241" width="67.5" height="18"/><rect x="185" y="281" width="135" height="18"/>
+    <rect x="222.5" y="321" width="97.5" height="18"/>
+  </g>
+  <!-- size numbers -->
+  <g fill="currentColor" font-size="12.5" text-anchor="middle">
+    <text x="442" y="94">60</text><text x="461" y="134">110</text><text x="448" y="174">75</text>
+    <text x="286" y="254">90</text><text x="252" y="294">180</text><text x="271" y="334">130</text>
+  </g>
+  <!-- prices -->
+  <g font-size="13" text-anchor="middle" font-weight="600">
+    <text x="370" y="94" fill="#e5484d">100.05</text>
+    <text x="370" y="134" fill="#e5484d">100.04</text>
+    <text x="370" y="174" fill="#e5484d" font-weight="700">100.03</text>
+    <text x="370" y="214" fill="currentColor" opacity="0.6">100.02</text>
+    <text x="370" y="254" fill="#2ca35e" font-weight="700">100.01</text>
+    <text x="370" y="294" fill="#2ca35e">100.00</text>
+    <text x="370" y="334" fill="#2ca35e">99.99</text>
+  </g>
+  <!-- midprice line -->
+  <line x1="170" y1="210" x2="600" y2="210" stroke="currentColor" stroke-width="1.2" stroke-dasharray="5 4" opacity="0.55"/>
+  <g fill="currentColor" text-anchor="end">
+    <text x="162" y="206" font-size="12" opacity="0.85">midprice = 100.02</text>
+    <text x="162" y="220" font-size="10" opacity="0.6">(bid + ask) / 2</text>
+  </g>
+  <!-- spread bracket -->
+  <g stroke="#000" stroke-width="0"></g>
+  <line x1="600" y1="170" x2="600" y2="250" stroke="currentColor" stroke-width="1.5" opacity="0.8"/>
+  <line x1="594" y1="170" x2="600" y2="170" stroke="currentColor" stroke-width="1.5" opacity="0.8"/>
+  <line x1="594" y1="250" x2="600" y2="250" stroke="currentColor" stroke-width="1.5" opacity="0.8"/>
+  <text x="606" y="166" font-size="12" font-weight="600" fill="#e5484d">best ask 100.03</text>
+  <text x="606" y="205" font-size="12" font-weight="600" fill="currentColor">spread = 2 ticks</text>
+  <text x="606" y="220" font-size="11" fill="currentColor" opacity="0.75">( = 0.02 )</text>
+  <text x="606" y="262" font-size="12" font-weight="600" fill="#2ca35e">best bid 100.01</text>
+  <!-- tick bracket -->
+  <g stroke="currentColor" stroke-width="0.8" opacity="0.3" stroke-dasharray="2 2">
+    <line x1="156" y1="290" x2="170" y2="290"/><line x1="156" y1="330" x2="170" y2="330"/>
+  </g>
+  <line x1="150" y1="290" x2="150" y2="330" stroke="currentColor" stroke-width="1.5" opacity="0.8"/>
+  <line x1="150" y1="290" x2="156" y2="290" stroke="currentColor" stroke-width="1.5" opacity="0.8"/>
+  <line x1="150" y1="330" x2="156" y2="330" stroke="currentColor" stroke-width="1.5" opacity="0.8"/>
+  <g fill="currentColor" text-anchor="end">
+    <text x="144" y="306" font-size="12" font-weight="600">1 tick</text>
+    <text x="144" y="321" font-size="11" opacity="0.75">= 0.01</text>
+  </g>
+</svg>
+<figcaption style="font-size:0.8rem;opacity:0.8">Resting buy orders (bids, green) sit below resting sell orders (asks, red). The
+best bid (100.01) and best ask (100.03) form the inside market; the gap between them
+is the <strong>spread</strong> (here 2 ticks = 0.02), the midprice sits halfway, and
+each rung is one <strong>tick</strong> (0.01) apart. The 100.02 level is empty —
+inside the spread, where no one is resting.</figcaption>
+</figure>
 
 A tight spread and substantial size at the inside market signal a liquid,
 competitive market; a wide spread signals that immediacy is expensive. These
@@ -81,6 +168,28 @@ quantities are exactly what [level-one market
 data](04-market-data.md#what-is-level-one-market-data) delivers, and Databento
 defines its MBP-1 schema as updates to this best bid and offer, including trades
 and depth changes ([Databento](sources.md#databento)).
+
+The tick size matters more than it first appears, because its magnitude *relative to
+price and volatility* shapes how a market trades. Contrast two contracts:
+
+- **A large (binding) tick.** When the tick is big relative to the price, the spread
+  is pinned at a single tick almost all the time — liquidity providers would quote
+  tighter but are not allowed to. Liquidity instead piles into deep queues at the
+  best bid and offer, so [queue position](#how-does-price-time-priority-work) becomes
+  the dominant edge and prices move in discrete jumps. The E-mini S&P 500 future
+  (ES), whose 0.25-point tick is worth \$12.50, is the classic example: it is almost
+  always exactly one tick wide, with thousands of lots queued at the touch.
+- **A small (non-binding) tick.** When the tick is tiny relative to the price, the
+  spread can be several ticks wide, each level holds little size (depth is spread
+  thinly across many rungs), prices move almost continuously, and it is cheap to
+  **price-improve** by stepping one tick ahead of the queue. A \$500 stock quoted in
+  \$0.01 ticks — a tick of 0.002% of price — behaves this way.
+
+On the ladder above, a smaller tick would mean more, finer rungs with orders spread
+thinly across them; a larger tick, fewer rungs with large queues pinned at the
+touch. Tick size is an exchange design lever: set it too large and traders pay an
+artificially wide spread, too small and the book fragments into noise across hundreds
+of rungs.
 
 ## How does price-time priority work?
 
