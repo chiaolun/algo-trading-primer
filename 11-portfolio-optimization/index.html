@@ -1296,9 +1296,8 @@ estimate, so naive MVO weights swing violently with tiny changes in <span class=
 <li><strong>Risk parity</strong> sidesteps expected-return estimation entirely, sizing positions
   so each contributes <em>equal risk</em> — robust precisely because it does not trust
   <span class="arithmatex">\(\mu\)</span>.</li>
-<li><strong>Black–Litterman</strong> starts from the market-implied equilibrium and lets you
-  tilt <em>gently</em> toward your views, instead of taking raw historical means at face
-  value.</li>
+<li><strong>Constraints</strong> — caps on individual weights, no-shorting, or limits on turnover —
+  bluntly prevent the optimizer from chasing noise into extreme positions.</li>
 </ul>
 <p>The throughline: trust your characterizations less than the math invites you to,
 especially the covariance matrix — whose worst failure is the subject of the final
