@@ -214,6 +214,44 @@ that exposes individual orders or at least queue dynamics. Cartea, Jaimungal and
 Penalva treat exactly this question of where market makers should post in the
 book ([Cartea et al.](sources.md#cartea)).
 
+The queue at a single price is first-in, first-out — incoming sells take the oldest
+orders first, so an order at the back fills only once everyone ahead of it has:
+
+<figure style="margin:1.5rem 0;width:100%">
+<svg viewBox="0 0 680 200" role="img" aria-label="Animation of price-time priority: incoming sells fill the oldest resting buy orders first" style="width:100%;height:auto;display:block;color:var(--md-default-fg-color)">
+  <title>Price-time priority: the oldest order at a price fills first</title>
+  <style>
+    .mkq-stage{animation:mkq-stage 8s infinite}
+    .mkq-arrow{animation:mkq-arrow 8s infinite}
+    .mkq-a{animation:mkq-a 8s infinite}.mkq-b{animation:mkq-b 8s infinite}.mkq-c{animation:mkq-c 8s infinite}
+    .mkq-you{animation:mkq-you 8s infinite}
+    @keyframes mkq-stage{0%,86%{opacity:1}90%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes mkq-arrow{0%,26%{transform:translateX(0)}32%,44%{transform:translateX(106px)}50%,62%{transform:translateX(212px)}68%,84%{transform:translateX(318px)}92%,100%{transform:translateX(0)}}
+    @keyframes mkq-a{0%,16%{opacity:1}26%,90%{opacity:.18}93%,100%{opacity:1}}
+    @keyframes mkq-b{0%,32%{opacity:1}44%,90%{opacity:.18}93%,100%{opacity:1}}
+    @keyframes mkq-c{0%,50%{opacity:1}62%,90%{opacity:.18}93%,100%{opacity:1}}
+    @keyframes mkq-you{0%,64%{opacity:0}70%,86%{opacity:1}90%,100%{opacity:0}}
+    @media (prefers-reduced-motion:reduce){.mkq-stage,.mkq-arrow,.mkq-a,.mkq-b,.mkq-c,.mkq-you{animation:none}}
+  </style>
+  <g class="mkq-stage">
+    <text x="340" y="20" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Price–time priority: at one price, the oldest order fills first</text>
+    <text x="340" y="38" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.7">four buy orders resting at 100.01 — incoming sells lift them from the front</text>
+    <g class="mkq-a"><rect x="120" y="70" width="96" height="44" rx="3" fill="#2ca35e" opacity="0.22" stroke="#2ca35e"/><text x="168" y="91" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">1st</text><text x="168" y="107" text-anchor="middle" font-size="12" fill="currentColor">35</text></g>
+    <g class="mkq-b"><rect x="226" y="70" width="96" height="44" rx="3" fill="#2ca35e" opacity="0.22" stroke="#2ca35e"/><text x="274" y="91" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">2nd</text><text x="274" y="107" text-anchor="middle" font-size="12" fill="currentColor">40</text></g>
+    <g class="mkq-c"><rect x="332" y="70" width="96" height="44" rx="3" fill="#2ca35e" opacity="0.22" stroke="#2ca35e"/><text x="380" y="91" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">3rd</text><text x="380" y="107" text-anchor="middle" font-size="12" fill="currentColor">25</text></g>
+    <rect x="438" y="70" width="96" height="44" rx="3" fill="#6366f1" opacity="0.22" stroke="#6366f1"/><text x="486" y="91" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">YOU</text><text x="486" y="107" text-anchor="middle" font-size="12" fill="currentColor">50</text>
+    <g class="mkq-you"><rect x="434" y="66" width="104" height="52" rx="4" fill="none" stroke="#6366f1" stroke-width="2"/><text x="486" y="138" text-anchor="middle" font-size="12" font-weight="600" fill="#6366f1">↑ now first to fill</text></g>
+    <text x="120" y="158" font-size="11.5" fill="currentColor" opacity="0.7">← arrived first (front)</text>
+    <text x="534" y="158" text-anchor="end" font-size="11.5" fill="currentColor" opacity="0.7">arrived last (back) →</text>
+    <g class="mkq-arrow"><path d="M156,48 L180,48 L168,62 Z" fill="#e5484d"/><text x="168" y="42" text-anchor="middle" font-size="11" font-weight="600" fill="#e5484d">SELL</text></g>
+  </g>
+</svg>
+<figcaption style="font-size:0.8rem;opacity:0.8">At one price the queue is first-in, first-out. Incoming sells take the oldest orders
+first (1st, then 2nd, then 3rd); <strong>YOU</strong>, at the back, fill only once
+everyone who arrived earlier has traded. Same price, very different fill order — which
+is why queue position matters. (Loops; respects reduced-motion.)</figcaption>
+</figure>
+
 ## What makes a market liquid?
 
 **Liquidity** is the ability to trade quickly, in size, without moving the price
