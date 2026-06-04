@@ -1,0 +1,66 @@
+site_name: Algo Trading Wiki
+site_description: >-
+  A self-study path to building a minimal, leakage-free futures backtester
+  driven by a machine-learning signal.
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.indexes
+    - navigation.footer
+    - content.code.copy
+    - toc.follow
+    - search.suggest
+    - search.highlight
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - footnotes
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight:
+      anchor_linenums: true
+
+plugins:
+  - search
+
+validation:
+  links:
+    not_found: warn
+    anchors: warn
+    unrecognized_links: warn
+
+nav:
+  - Home: index.md
+  - "1. Market structure & auctions": 01-market-structure.md
+  - "2. Futures contracts & expiries": 02-futures-contracts.md
+  - "3. Orders & execution": 03-orders-and-execution.md
+  - "4. Market data": 04-market-data.md
+  - "5. Bars & aggregation": 05-bars-and-aggregation.md
+  - "6. Backtesting engine design": 06-backtesting-engine.md
+  - "7. Look-forward bias & leakage": 07-look-forward-bias.md
+  - "8. Feature engineering & regression": 08-feature-engineering.md
+  - "9. From prediction to actions": 09-prediction-to-actions.md
+  - "10. Capstone system": 10-capstone.md
+  - Sources: sources.md
