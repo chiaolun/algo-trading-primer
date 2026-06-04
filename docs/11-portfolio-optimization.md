@@ -171,6 +171,68 @@ Characterizing a stream as alpha-plus-betas tells you what is truly novel, what 
 redundant with exposures you already hold, and what you are actually being
 compensated for.
 
+### What it means for a factor model to work
+
+So far Part B has treated factor analysis as a way to *describe* a stream. But the
+decomposition also changes how you *estimate* the quantity Part C needs most — the
+covariance between assets — and working through that estimation is the clearest way
+to say what it means for a factor model to "work."
+
+Take two assets with returns $r_1$ and $r_2$, and suppose you want their covariance
+$\sigma_{12}$. There are two ways to get it.
+
+**Estimate it directly.** Compute the sample covariance straight from the two return
+series:
+
+$$ \hat\sigma_{12} = \frac{1}{T-1}\sum_{t=1}^{T}(r_{1,t}-\bar r_1)(r_{2,t}-\bar r_2). $$
+
+This estimator is **unbiased**: whatever the true data-generating process, its
+expectation equals the true covariance, and as $T\to\infty$ it converges to the
+truth. It assumes nothing about how the assets are related. Its weakness is
+**variance** — with a realistic sample length it is noisy, because it leans on those
+two series alone and on however many observations you happen to have. Scaled up to
+$N$ assets, the full sample covariance matrix has $N(N+1)/2$ free parameters, each
+estimated from limited data; the noise compounds, and the matrix becomes
+ill-conditioned (even non-invertible) when $T$ is not comfortably larger than $N$.
+
+**Estimate it through the factor model.** Posit $r_i = \alpha_i + \beta_i^\top f +
+\varepsilon_i$, with shared factors $f$ (covariance $\Sigma_f$) and idiosyncratic
+residuals $\varepsilon_i$ that are *assumed uncorrelated across assets*. Under that
+structure the covariance collapses to
+
+$$ \sigma_{12} = \beta_1^\top \Sigma_f\, \beta_2. $$
+
+So you estimate each asset's loadings $\hat\beta_1, \hat\beta_2$ **individually** (one
+regression per asset), estimate the factor covariance $\hat\Sigma_f$ **once** — from
+the factor history, shared across every asset — and multiply. This estimator has
+**much lower variance**: it fits only a handful of loadings per asset plus one
+shared, precisely-estimated factor covariance, instead of a free parameter for every
+pair, and it pools information across all assets and a long factor history. But it is
+**biased**: the assumption that residuals are uncorrelated is never exactly true (two
+oil producers share an oil-price risk the market factor misses; loadings drift over
+time; the factor set is incomplete), so the model-implied covariance is
+systematically off by whatever real co-movement the factors fail to capture.
+
+**This is the bias–variance tradeoff**, in covariance-estimation form. The direct
+sample covariance is the **zero-bias, high-variance** estimator; the factor estimate
+deliberately accepts a little bias to buy a large reduction in variance. A factor
+model **works** precisely when that trade is favorable — when the bias it introduces
+is *small relative to the variance it removes*, so the model-implied covariance is
+**closer to the truth out of sample** than the raw sample number, even though the
+sample number is the one that is technically unbiased. Equivalently, it works when
+the residuals really are *mostly* uncorrelated once the common factors are accounted
+for: the co-movement the factor estimate throws away is then mostly noise, not
+signal. It **fails** when the discarded structure is large — a missing factor, or a
+genuine residual correlation big enough that the bias swamps the variance you saved.
+
+This is also why the [robust covariance
+fixes](#why-mean-variance-optimization-is-fragile) in Part C exist. **Shrinkage**
+(Ledoit–Wolf) interpolates between exactly these two poles — it blends the
+unbiased-but-noisy sample covariance with a biased-but-stable structured target
+(often a factor or constant-correlation model), choosing the mix that minimizes total
+estimation error. The factor model sits at one end of that spectrum and the sample
+covariance at the other; the bias–variance tradeoff is the axis running between them.
+
 ## Part C — Characterizing how streams combine (reasoning about combining)
 
 ### Diversification and the covariance matrix
