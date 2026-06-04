@@ -85,9 +85,9 @@ have error bars. Two managers can report the same 1.5 Sharpe, but if one has ten
 years of daily data and the other has three months, you should believe them very
 differently. The **Probabilistic Sharpe Ratio (PSR)** makes that precise: instead
 of a point estimate, it reports the **probability that the true Sharpe exceeds a
-benchmark** $SR^\*$ ([Bailey & López de Prado](sources.md#psr)):
+benchmark** $SR^{*}$ ([Bailey & López de Prado](sources.md#psr)):
 
-$$ \widehat{PSR}(SR^\*) = \Phi\!\left( \frac{(\widehat{SR} - SR^\*)\,\sqrt{n-1}}
+$$ \widehat{PSR}(SR^{*}) = \Phi\!\left( \frac{(\widehat{SR} - SR^{*})\,\sqrt{n-1}}
 {\sqrt{1 - \hat\gamma_3 \widehat{SR} + \frac{\hat\gamma_4 - 1}{4}\widehat{SR}^2}} \right) $$
 
 where $n$ is the number of observations, $\hat\gamma_3$ the skew, $\hat\gamma_4$
