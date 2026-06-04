@@ -811,6 +811,48 @@ floor for a sell — and will not trade beyond it. If it cannot trade immediatel
 at an acceptable price, it <strong>rests</strong> in the book as displayed liquidity at its
 limit price, waiting. It gives you <strong>price control</strong> and the chance to <strong>earn</strong>
 the spread rather than pay it.</p>
+<p>Because it does not cross the ask, a limit buy does not trade — it joins the book.
+Posted inside the spread it even becomes the new best bid, tightening the market:</p>
+<figure style="margin:1.5rem 0;width:100%">
+<svg viewBox="0 0 680 232" role="img" aria-label="Animation of a limit buy order resting in the book and becoming the new best bid" style="width:100%;height:auto;display:block;color:var(--md-default-fg-color)">
+  <title>A limit buy that does not cross the ask rests and can improve the best bid</title>
+  <style>
+    .mklr-stage{animation:mklr-stage 8s infinite}
+    .mklr-slide{animation:mklr-slide 8s infinite}
+    .mklr-tagold{animation:mklr-tagold 8s infinite}.mklr-tagnew{animation:mklr-tagnew 8s infinite}
+    .mklr-s2{animation:mklr-s2 8s infinite}.mklr-s1{animation:mklr-s1 8s infinite}.mklr-note{animation:mklr-note 8s infinite}
+    @keyframes mklr-stage{0%,86%{opacity:1}90%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes mklr-slide{0%,16%{transform:translateX(-300px);opacity:0}40%,86%{transform:translateX(0);opacity:1}90%,100%{transform:translateX(-300px);opacity:0}}
+    @keyframes mklr-tagold{0%,34%{opacity:1}44%,90%{opacity:.25}93%,100%{opacity:1}}
+    @keyframes mklr-tagnew{0%,38%{opacity:0}46%,86%{opacity:1}90%,100%{opacity:0}}
+    @keyframes mklr-s2{0%,34%{opacity:1}42%,90%{opacity:0}93%,100%{opacity:1}}
+    @keyframes mklr-s1{0%,38%{opacity:0}46%,86%{opacity:1}90%,100%{opacity:0}}
+    @keyframes mklr-note{0%,22%{opacity:0}30%,86%{opacity:1}90%,100%{opacity:0}}
+    @media (prefers-reduced-motion:reduce){.mklr-stage,.mklr-slide,.mklr-tagold,.mklr-tagnew,.mklr-s2,.mklr-s1,.mklr-note{animation:none}}
+  </style>
+  <g class="mklr-stage">
+    <text x="340" y="22" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">A BUY LIMIT at 100.02 doesn't cross the ask — it rests as the new best bid</text>
+    <g font-size="13" font-weight="600" text-anchor="middle">
+      <text x="340" y="66" fill="#e5484d">100.04</text><text x="340" y="106" fill="#e5484d">100.03</text>
+      <text x="340" y="146" fill="currentColor" opacity="0.6">100.02</text><text x="340" y="186" fill="#2ca35e">100.01</text>
+    </g>
+    <rect x="380" y="50" width="137" height="24" fill="#e5484d" opacity="0.3"/><text x="390" y="66" font-size="12" fill="currentColor">110</text>
+    <rect x="380" y="90" width="100" height="24" fill="#e5484d" opacity="0.3"/><text x="390" y="106" font-size="12" fill="currentColor">80</text>
+    <rect x="188" y="170" width="112" height="24" fill="#2ca35e" opacity="0.3"/><text x="244" y="186" text-anchor="middle" font-size="12" fill="currentColor">90</text>
+    <g class="mklr-slide"><rect x="225" y="130" width="75" height="24" fill="#2ca35e" opacity="0.45" stroke="#2ca35e"/><text x="262" y="146" text-anchor="middle" font-size="12" font-weight="600" fill="currentColor">60</text></g>
+    <text class="mklr-tagold" x="180" y="186" text-anchor="end" font-size="12" fill="#2ca35e">best bid →</text>
+    <text class="mklr-tagnew" x="180" y="146" text-anchor="end" font-size="12" font-weight="600" fill="#2ca35e">new best bid →</text>
+    <text class="mklr-note" x="490" y="106" font-size="11.5" font-weight="600" fill="currentColor">✗ doesn't cross 100.03 — no trade</text>
+    <text class="mklr-s2" x="525" y="150" font-size="12" fill="currentColor" opacity="0.85">spread: 0.02 (2 ticks)</text>
+    <text class="mklr-s1" x="525" y="150" font-size="12" font-weight="600" fill="#2ca35e">spread: 0.01 — tighter</text>
+  </g>
+</svg>
+<figcaption style="font-size:0.8rem;opacity:0.8">A limit buy for 60 priced at 100.02 sits below the best ask (100.03), so it cannot
+trade. It rests in the book — and because 100.02 beats the old best bid of 100.01, it
+becomes the new best bid, narrowing the spread from 2 ticks to 1. (Loops; respects
+reduced-motion.)</figcaption>
+</figure>
+
 <p>The costs are subtler than a market order's:</p>
 <ul>
 <li><strong>Queue position / non-execution risk.</strong> A resting limit order only fills when
@@ -924,6 +966,45 @@ price across <a href="../04-market-data/#what-is-market-by-price-data">multiple 
 levels</a>. Understanding partials
 requires data that exposes depth — L2 and MBP documentation
 (<a href="../sources/#databento">Databento</a>).</p>
+<p>When an incoming aggressor is smaller than your resting size, only part of your order
+trades and the balance keeps its place in the queue:</p>
+<figure style="margin:1.5rem 0;width:100%">
+<svg viewBox="0 0 680 168" role="img" aria-label="Animation of a partial fill: a small incoming sell fills part of a larger resting buy order" style="width:100%;height:auto;display:block;color:var(--md-default-fg-color)">
+  <title>Partial fill: an aggressor smaller than your resting size</title>
+  <style>
+    .mkpf-stage{animation:mkpf-stage 7s infinite}
+    .mkpf-bar{transform-box:fill-box;transform-origin:left center;animation:mkpf-bar 7s infinite}
+    .mkpf-chunk{animation:mkpf-chunk 7s infinite}
+    .mkpf-n100{animation:mkpf-n100 7s infinite}.mkpf-n60{animation:mkpf-n60 7s infinite}
+    .mkpf-sell{animation:mkpf-sell 7s infinite}.mkpf-res{animation:mkpf-res 7s infinite}
+    @keyframes mkpf-stage{0%,86%{opacity:1}90%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes mkpf-bar{0%,24%{transform:scaleX(1)}42%,86%{transform:scaleX(.6)}92%,100%{transform:scaleX(1)}}
+    @keyframes mkpf-chunk{0%,24%{opacity:0}30%,36%{opacity:1}44%,100%{opacity:0}}
+    @keyframes mkpf-n100{0%,24%{opacity:1}34%,90%{opacity:0}93%,100%{opacity:1}}
+    @keyframes mkpf-n60{0%,32%{opacity:0}42%,86%{opacity:1}90%,100%{opacity:0}}
+    @keyframes mkpf-sell{0%,16%{opacity:0}22%,40%{opacity:1}48%,100%{opacity:0}}
+    @keyframes mkpf-res{0%,42%{opacity:0}50%,86%{opacity:1}90%,100%{opacity:0}}
+    @media (prefers-reduced-motion:reduce){.mkpf-stage,.mkpf-bar,.mkpf-chunk,.mkpf-n100,.mkpf-n60,.mkpf-sell,.mkpf-res{animation:none}}
+  </style>
+  <g class="mkpf-stage">
+    <text x="340" y="22" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Partial fill: a 40-lot sell hits your 100-lot resting bid</text>
+    <text x="156" y="80" text-anchor="end" font-size="13" font-weight="600" fill="#2ca35e">your bid</text>
+    <text x="156" y="96" text-anchor="end" font-size="12" fill="currentColor" opacity="0.7">@ 100.01</text>
+    <rect class="mkpf-bar" x="170" y="66" width="300" height="30" fill="#2ca35e" opacity="0.3"/>
+    <rect class="mkpf-chunk" x="350" y="66" width="120" height="30" fill="#e5484d" opacity="0.45"/>
+    <text class="mkpf-n100" x="185" y="86" font-size="12.5" fill="currentColor">100 resting</text>
+    <text class="mkpf-n60" x="185" y="86" font-size="12.5" font-weight="600" fill="currentColor">60 still resting</text>
+    <text class="mkpf-sell" x="486" y="86" font-size="12.5" font-weight="600" fill="#e5484d">← incoming SELL 40</text>
+    <text class="mkpf-res" x="170" y="128" font-size="12.5" font-weight="600" fill="currentColor">✓ 40 filled · 60 keeps its queue position and waits</text>
+  </g>
+</svg>
+<figcaption style="font-size:0.8rem;opacity:0.8">Your resting buy displays 100 lots. A sell for only 40 arrives, so 40 of your order
+fills and the remaining 60 stays put — keeping its place in the
+<a href="../01-market-structure/#how-does-price-time-priority-work">queue</a>.
+Tracking that remaining quantity is essential to a realistic fill model. (Loops;
+respects reduced-motion.)</figcaption>
+</figure>
+
 <h2 id="what-assumptions-are-needed-to-simulate-limit-order-fills">What assumptions are needed to simulate limit order fills?<a class="headerlink" href="#what-assumptions-are-needed-to-simulate-limit-order-fills" title="Permanent link">&para;</a></h2>
 <p>Simulating a <strong>market</strong> order fill is comparatively easy: you know there was
 liquidity and you sweep the recorded book. Simulating a <strong>limit</strong> order fill is

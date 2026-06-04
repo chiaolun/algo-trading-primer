@@ -919,6 +919,50 @@ they change. So L2 reveals things trades never can:</p>
 </ul>
 <p>Databento's L2 and MBP-10 docs describe exactly these aggregated-depth dynamics
 (<a href="../sources/#databento">Databento</a>).</p>
+<p>A cancellation is the clearest example of something only L2 reveals: liquidity
+vanishes with no trade, and the best price can step away — a move the tape never
+shows.</p>
+<figure style="margin:1.5rem 0;width:100%">
+<svg viewBox="0 0 680 220" role="img" aria-label="Animation of a cancellation: the best ask is pulled with no trade and the best ask steps to a worse price" style="width:100%;height:auto;display:block;color:var(--md-default-fg-color)">
+  <title>A cancellation removes liquidity with no trade and the best ask steps away</title>
+  <style>
+    .mkcx-stage{animation:mkcx-stage 8s infinite}
+    .mkcx-b3{animation:mkcx-b3 8s infinite}.mkcx-p3{animation:mkcx-p3 8s infinite}
+    .mkcx-pa{animation:mkcx-pa 8s infinite}.mkcx-pb{animation:mkcx-pb 8s infinite}
+    .mkcx-note{animation:mkcx-note 8s infinite}.mkcx-s2{animation:mkcx-s2 8s infinite}.mkcx-s1{animation:mkcx-s1 8s infinite}
+    @keyframes mkcx-stage{0%,86%{opacity:1}90%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes mkcx-b3{0%,24%{opacity:.3}44%,86%{opacity:0}92%,100%{opacity:.3}}
+    @keyframes mkcx-p3{0%,24%{opacity:1}44%,90%{opacity:.25}93%,100%{opacity:1}}
+    @keyframes mkcx-pa{0%,24%{opacity:1}40%,90%{opacity:0}93%,100%{opacity:1}}
+    @keyframes mkcx-pb{0%,44%{opacity:0}52%,86%{opacity:1}90%,100%{opacity:0}}
+    @keyframes mkcx-note{0%,26%{opacity:0}34%,86%{opacity:1}90%,100%{opacity:0}}
+    @keyframes mkcx-s2{0%,40%{opacity:1}48%,90%{opacity:0}93%,100%{opacity:1}}
+    @keyframes mkcx-s1{0%,48%{opacity:0}56%,86%{opacity:1}90%,100%{opacity:0}}
+    @media (prefers-reduced-motion:reduce){.mkcx-stage,.mkcx-b3,.mkcx-p3,.mkcx-pa,.mkcx-pb,.mkcx-note,.mkcx-s2,.mkcx-s1{animation:none}}
+  </style>
+  <g class="mkcx-stage">
+    <text x="340" y="20" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">The lone order at the best ask cancels — no trade — so the best ask steps to 100.04</text>
+    <g font-size="13" font-weight="600" text-anchor="end">
+      <text x="282" y="60" fill="#e5484d">100.05</text><text x="282" y="100" fill="#e5484d">100.04</text>
+      <text class="mkcx-p3" x="282" y="140" fill="#e5484d">100.03</text><text x="282" y="184" fill="#2ca35e">100.01</text>
+    </g>
+    <rect x="300" y="44" width="75" height="24" fill="#e5484d" opacity="0.3"/><text x="310" y="60" font-size="12" fill="currentColor">60</text>
+    <rect x="300" y="84" width="137" height="24" fill="#e5484d" opacity="0.3"/><text x="310" y="100" font-size="12" fill="currentColor">110</text>
+    <rect class="mkcx-b3" x="300" y="124" width="94" height="24" fill="#e5484d" opacity="0.3"/><text class="mkcx-p3" x="310" y="140" font-size="12" fill="currentColor">75</text>
+    <rect x="300" y="168" width="112" height="24" fill="#2ca35e" opacity="0.3"/><text x="310" y="184" font-size="12" fill="currentColor">90</text>
+    <text class="mkcx-pa" x="402" y="140" font-size="12" fill="#e5484d">← best ask 100.03</text>
+    <text class="mkcx-pb" x="445" y="100" font-size="12" font-weight="600" fill="#e5484d">← new best ask 100.04</text>
+    <text class="mkcx-note" x="402" y="140" font-size="11.5" font-weight="600" fill="currentColor">✗ cancelled — no print on the tape</text>
+    <text class="mkcx-s2" x="500" y="184" font-size="12" fill="currentColor" opacity="0.85">spread: 0.02</text>
+    <text class="mkcx-s1" x="500" y="184" font-size="12" font-weight="600" fill="currentColor">spread: 0.03 — wider</text>
+  </g>
+</svg>
+<figcaption style="font-size:0.8rem;opacity:0.8">The only order resting at the best ask (100.03) is cancelled — pulled with no trade,
+so nothing prints on the tape. The best ask steps up to 100.04 and the spread widens
+from 0.02 to 0.03. Trade data would show none of this; L2 shows it plainly. (Loops;
+respects reduced-motion.)</figcaption>
+</figure>
+
 <h2 id="what-can-trade-data-show-that-level-two-snapshots-may-not">What can trade data show that level-two snapshots may not?<a class="headerlink" href="#what-can-trade-data-show-that-level-two-snapshots-may-not" title="Permanent link">&para;</a></h2>
 <p>Conversely, trades capture realized economics that a sequence of book snapshots
 can miss — especially if the book is sampled rather than streamed event-by-event:</p>
