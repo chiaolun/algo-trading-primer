@@ -1085,8 +1085,8 @@ have error bars. Two managers can report the same 1.5 Sharpe, but if one has ten
 years of daily data and the other has three months, you should believe them very
 differently. The <strong>Probabilistic Sharpe Ratio (PSR)</strong> makes that precise: instead
 of a point estimate, it reports the <strong>probability that the true Sharpe exceeds a
-benchmark</strong> <span class="arithmatex">\(SR^\*\)</span> (<a href="../sources/#psr">Bailey &amp; López de Prado</a>):</p>
-<div class="arithmatex">\[ \widehat{PSR}(SR^\*) = \Phi\!\left( \frac{(\widehat{SR} - SR^\*)\,\sqrt{n-1}}
+benchmark</strong> <span class="arithmatex">\(SR^{*}\)</span> (<a href="../sources/#psr">Bailey &amp; López de Prado</a>):</p>
+<div class="arithmatex">\[ \widehat{PSR}(SR^{*}) = \Phi\!\left( \frac{(\widehat{SR} - SR^{*})\,\sqrt{n-1}}
 {\sqrt{1 - \hat\gamma_3 \widehat{SR} + \frac{\hat\gamma_4 - 1}{4}\widehat{SR}^2}} \right) \]</div>
 <p>where <span class="arithmatex">\(n\)</span> is the number of observations, <span class="arithmatex">\(\hat\gamma_3\)</span> the skew, <span class="arithmatex">\(\hat\gamma_4\)</span>
 the kurtosis, and <span class="arithmatex">\(\Phi\)</span> the normal CDF. Read it qualitatively: PSR <strong>rises</strong> with
