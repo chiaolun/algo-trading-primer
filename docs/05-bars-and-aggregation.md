@@ -46,6 +46,59 @@ its interval **closes** — the High, Low, Close and Volume are only final at th
 end of the bar, which is the crux of [same-bar
 leakage](07-look-forward-bias.md#why-is-same-bar-execution-dangerous).
 
+The same trades summarize into one bar per interval. That bar is drawn two ways —
+the **candlestick** and the leaner **OHLC bar** — shown separately below.
+
+<figure style="margin:1.5rem 0;width:100%">
+<svg viewBox="0 0 700 320" role="img" aria-label="A series of trades on the left aggregated into candlestick bars on the right" style="width:100%;height:auto;display:block;color:var(--md-default-fg-color)">
+  <title>Trades aggregate into candlestick bars, one per interval</title>
+  <g stroke="currentColor" opacity="0.12"><line x1="60" y1="40" x2="680" y2="40"/><line x1="60" y1="156" x2="680" y2="156"/><line x1="60" y1="271" x2="680" y2="271"/></g>
+  <g fill="currentColor" font-size="11" opacity="0.6" text-anchor="end"><text x="50" y="44">100.8</text><text x="50" y="160">100.4</text><text x="50" y="275">100.0</text></g>
+  <text x="195" y="22" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">A series of trades…</text>
+  <text x="535" y="22" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">…becomes candlestick bars</text>
+  <g stroke="currentColor" opacity="0.18" stroke-dasharray="3 3"><line x1="156" y1="36" x2="156" y2="300"/><line x1="243" y1="36" x2="243" y2="300"/></g>
+  <polyline fill="none" stroke="#6366f1" stroke-width="2" points="75,213 90,170 105,242 120,141 135,98 148,156 162,156 177,69 192,170 207,271 222,228 236,242 250,242 265,257 282,184 300,127 316,170 326,156"/>
+  <g fill="#6366f1"><circle cx="75" cy="213" r="2.4"/><circle cx="90" cy="170" r="2.4"/><circle cx="105" cy="242" r="2.4"/><circle cx="120" cy="141" r="2.4"/><circle cx="135" cy="98" r="2.4"/><circle cx="148" cy="156" r="2.4"/><circle cx="162" cy="156" r="2.4"/><circle cx="177" cy="69" r="2.4"/><circle cx="192" cy="170" r="2.4"/><circle cx="207" cy="271" r="2.4"/><circle cx="222" cy="228" r="2.4"/><circle cx="236" cy="242" r="2.4"/><circle cx="250" cy="242" r="2.4"/><circle cx="265" cy="257" r="2.4"/><circle cx="282" cy="184" r="2.4"/><circle cx="300" cy="127" r="2.4"/><circle cx="316" cy="170" r="2.4"/><circle cx="326" cy="156" r="2.4"/></g>
+  <g fill="currentColor" font-size="11" opacity="0.6" text-anchor="middle"><text x="113" y="314">09:30</text><text x="199" y="314">09:31</text><text x="286" y="314">09:32</text></g>
+  <text x="362" y="150" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.7">aggregate</text>
+  <path d="M346,165 L378,165 M371,159 L378,165 L371,171" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.7"/>
+  <line x1="430" y1="98" x2="430" y2="242" stroke="#2ca35e" stroke-width="1.5"/><rect x="417" y="156" width="26" height="57" fill="#2ca35e" opacity="0.5" stroke="#2ca35e"/>
+  <line x1="520" y1="69" x2="520" y2="271" stroke="#e5484d" stroke-width="1.5"/><rect x="507" y="156" width="26" height="86" fill="#e5484d" opacity="0.5" stroke="#e5484d"/>
+  <line x1="610" y1="127" x2="610" y2="257" stroke="#2ca35e" stroke-width="1.5"/><rect x="597" y="156" width="26" height="86" fill="#2ca35e" opacity="0.5" stroke="#2ca35e"/>
+  <g fill="currentColor" font-size="10.5" opacity="0.85" font-weight="600"><text x="430" y="92" text-anchor="middle">H</text><text x="430" y="256" text-anchor="middle">L</text><text x="409" y="217" text-anchor="end">O</text><text x="409" y="160" text-anchor="end">C</text></g>
+  <g fill="currentColor" font-size="11" opacity="0.6" text-anchor="middle"><text x="430" y="314">09:30</text><text x="520" y="314">09:31</text><text x="610" y="314">09:32</text></g>
+</svg>
+<figcaption style="font-size:0.8rem;opacity:0.8">The same trades, grouped into three one-minute intervals (left), reduce to one
+<strong>candlestick</strong> each (right): the body spans open→close — green when the
+close is at or above the open, red when below — and the thin wicks reach the
+interval's high and low. Interval 1 is labelled O/H/L/C.</figcaption>
+</figure>
+
+<figure style="margin:1.5rem 0;width:100%">
+<svg viewBox="0 0 700 320" role="img" aria-label="The same trades aggregated into OHLC bars, the thinner convention" style="width:100%;height:auto;display:block;color:var(--md-default-fg-color)">
+  <title>The same bars drawn as OHLC bars (the thinner variant)</title>
+  <g stroke="currentColor" opacity="0.12"><line x1="60" y1="40" x2="680" y2="40"/><line x1="60" y1="156" x2="680" y2="156"/><line x1="60" y1="271" x2="680" y2="271"/></g>
+  <g fill="currentColor" font-size="11" opacity="0.6" text-anchor="end"><text x="50" y="44">100.8</text><text x="50" y="160">100.4</text><text x="50" y="275">100.0</text></g>
+  <text x="195" y="22" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">A series of trades…</text>
+  <text x="535" y="22" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">…becomes OHLC bars (thinner)</text>
+  <g stroke="currentColor" opacity="0.18" stroke-dasharray="3 3"><line x1="156" y1="36" x2="156" y2="300"/><line x1="243" y1="36" x2="243" y2="300"/></g>
+  <polyline fill="none" stroke="#6366f1" stroke-width="2" points="75,213 90,170 105,242 120,141 135,98 148,156 162,156 177,69 192,170 207,271 222,228 236,242 250,242 265,257 282,184 300,127 316,170 326,156"/>
+  <g fill="#6366f1"><circle cx="75" cy="213" r="2.4"/><circle cx="90" cy="170" r="2.4"/><circle cx="105" cy="242" r="2.4"/><circle cx="120" cy="141" r="2.4"/><circle cx="135" cy="98" r="2.4"/><circle cx="148" cy="156" r="2.4"/><circle cx="162" cy="156" r="2.4"/><circle cx="177" cy="69" r="2.4"/><circle cx="192" cy="170" r="2.4"/><circle cx="207" cy="271" r="2.4"/><circle cx="222" cy="228" r="2.4"/><circle cx="236" cy="242" r="2.4"/><circle cx="250" cy="242" r="2.4"/><circle cx="265" cy="257" r="2.4"/><circle cx="282" cy="184" r="2.4"/><circle cx="300" cy="127" r="2.4"/><circle cx="316" cy="170" r="2.4"/><circle cx="326" cy="156" r="2.4"/></g>
+  <g fill="currentColor" font-size="11" opacity="0.6" text-anchor="middle"><text x="113" y="314">09:30</text><text x="199" y="314">09:31</text><text x="286" y="314">09:32</text></g>
+  <text x="362" y="150" text-anchor="middle" font-size="11.5" fill="currentColor" opacity="0.7">aggregate</text>
+  <path d="M346,165 L378,165 M371,159 L378,165 L371,171" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.7"/>
+  <g stroke="#2ca35e" stroke-width="2" fill="none"><line x1="430" y1="98" x2="430" y2="242"/><line x1="422" y1="213" x2="430" y2="213"/><line x1="430" y1="156" x2="438" y2="156"/></g>
+  <g stroke="#e5484d" stroke-width="2" fill="none"><line x1="520" y1="69" x2="520" y2="271"/><line x1="512" y1="156" x2="520" y2="156"/><line x1="520" y1="242" x2="528" y2="242"/></g>
+  <g stroke="#2ca35e" stroke-width="2" fill="none"><line x1="610" y1="127" x2="610" y2="257"/><line x1="602" y1="242" x2="610" y2="242"/><line x1="610" y1="156" x2="618" y2="156"/></g>
+  <g fill="currentColor" font-size="10.5" opacity="0.85" font-weight="600"><text x="430" y="92" text-anchor="middle">H</text><text x="430" y="256" text-anchor="middle">L</text><text x="416" y="217" text-anchor="end">O</text><text x="444" y="160" text-anchor="start">C</text></g>
+  <g fill="currentColor" font-size="11" opacity="0.6" text-anchor="middle"><text x="430" y="314">09:30</text><text x="520" y="314">09:31</text><text x="610" y="314">09:32</text></g>
+</svg>
+<figcaption style="font-size:0.8rem;opacity:0.8">The identical bars in the leaner <strong>OHLC-bar</strong> convention: a vertical
+line from the low to the high, a tick on the <em>left</em> for the open and a tick on
+the <em>right</em> for the close. Same four numbers as the candlestick, thinner
+glyph — note interval 1's left tick (open) and right tick (close).</figcaption>
+</figure>
+
 ## What happens if no trades occur during a bar interval?
 
 If no trades print during an interval there is nothing to reduce, and you must
