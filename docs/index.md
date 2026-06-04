@@ -21,7 +21,7 @@ becomes a position, an order, and a profit-and-loss statement you can believe.
   Cover the answer, attempt it, then read.
 - **Follow the citations.** Every factual claim links to an entry on the
   [Sources](sources.md) page, which tells you where to go deeper.
-- **Build as you go.** By [Section 10](10-capstone.md) you should be assembling
+- **Build as you go.** By the [homework](10-homework.md) you should be assembling
   the pieces into a working end-to-end system.
 
 ## The learning path
@@ -51,7 +51,13 @@ becomes a position, an order, and a profit-and-loss statement you can believe.
 9. **[From prediction to actions](09-prediction-to-actions.md)** — predictions
    to positions to orders, when to use which order type, what to log, and how to
    evaluate net of costs.
-10. **[Capstone system](10-capstone.md)** — assemble, prove there is no leakage,
-    explain the failures, and compare execution variants.
+10. **[Homework: build a standalone algo-trading system](10-homework.md)** —
+    assemble it, prove there is no leakage, explain the failures, and compare
+    execution variants.
+11. **[Portfolio optimization](11-portfolio-optimization.md)** — *(advanced)* a
+    standard way to characterize investments so you can value them against each
+    other and combine them: risk-adjusted return and the Sharpe ratio, factor
+    analysis, Markowitz mean-variance optimization, and why diversification fails
+    in a crisis.
 
 When you want the underlying references, see the **[Sources](sources.md)** page.

@@ -41,6 +41,12 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.highlight:
       anchor_linenums: true
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
 
 plugins:
   - search
@@ -62,5 +68,6 @@ nav:
   - "7. Look-forward bias & leakage": 07-look-forward-bias.md
   - "8. Feature engineering & regression": 08-feature-engineering.md
   - "9. From prediction to actions": 09-prediction-to-actions.md
-  - "10. Capstone system": 10-capstone.md
+  - "10. Homework": 10-homework.md
+  - "11. Portfolio optimization": 11-portfolio-optimization.md
   - Sources: sources.md

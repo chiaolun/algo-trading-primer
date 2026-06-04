@@ -102,7 +102,7 @@ Steps 2 and 8 are what make it a *futures* backtester specifically; everything
 else generalizes. The roll mechanics come from [CME's roll
 materials](sources.md#cme) and the event loop from
 [QuantStart](sources.md#quantstart). This is precisely the system you assemble in
-the [capstone](10-capstone.md).
+the [homework](10-homework.md).
 
 ## What assumptions determine backtest realism?
 

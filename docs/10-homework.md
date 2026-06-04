@@ -1,11 +1,12 @@
-# 10. Capstone system
+# 10. Homework: build a standalone algo-trading system
 
-This final section is not new material — it is the **integration test**. Everything
-from [market structure](01-market-structure.md) through [evaluating net
+This section is not new material — it is your **assignment**. Everything from
+[market structure](01-market-structure.md) through [evaluating net
 P&L](09-prediction-to-actions.md#how-do-you-evaluate-the-strategy-after-execution-costs)
-comes together into one working system, and four demonstrations prove you actually
-understand it. If you can build the system, prove it doesn't cheat, explain its
-failures, and compare execution variants, you have met the goal of this wiki.
+comes together into one **standalone algo-trading system** that you build
+yourself. The four deliverables below are the homework: build the system, prove
+it doesn't cheat, explain its failures, and compare execution variants. If you can
+do all four, you have met the goal of this wiki.
 
 References pull from across the curriculum: [CME roll
 materials](sources.md#cme), the [Databento](sources.md#databento) /
@@ -116,5 +117,8 @@ from [Databento](sources.md#databento).
 
 ---
 
-You've reached the end of the path. Revisit any section from **[Home](index.md)**,
-or go deeper with the **[Sources](sources.md)**.
+Once your standalone system runs, the natural next question is how to run *many*
+strategies together. Next: **[Portfolio optimization →](11-portfolio-optimization.md)**
+
+Or revisit any section from **[Home](index.md)**, or go deeper with the
+**[Sources](sources.md)**.

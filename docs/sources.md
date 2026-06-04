@@ -120,6 +120,59 @@ dataset includes price, volume, open interest, and expiry.
 
 - <https://algoseek.com/data-sets/list>
 
+## Portfolio construction & risk
+
+### Harry Markowitz — *Portfolio Selection* (1952) {#markowitz}
+
+The origin of [mean-variance
+optimization](11-portfolio-optimization.md#markowitz-mean-variance-optimization):
+treat expected return as desirable and variance as undesirable, and choose
+portfolio weights on the efficient frontier. The foundation of modern portfolio
+theory.
+
+- <https://www.jstor.org/stable/2975974>
+
+### William F. Sharpe — *The Sharpe Ratio* (1994) {#sharpe}
+
+The reward-to-variability ratio for [risk-adjusted
+return](11-portfolio-optimization.md#the-sharpe-ratio): excess return per unit of
+standard deviation, and the lingua franca for comparing return streams.
+
+- <https://web.stanford.edu/~wfsharpe/art/sr/sr.htm>
+
+### Bailey & López de Prado — Probabilistic & Deflated Sharpe Ratio {#psr}
+
+For the [Probabilistic Sharpe
+Ratio](11-portfolio-optimization.md#the-probabilistic-sharpe-ratio): a Sharpe
+estimate is uncertain, so PSR gives the probability the true Sharpe exceeds a
+benchmark given sample length, skew, and kurtosis; the Deflated Sharpe Ratio
+corrects for the number of trials, connecting to
+[overfitting](07-look-forward-bias.md#what-is-data-snooping-or-backtest-overfitting).
+Also developed in [*Advances in Financial Machine
+Learning*](sources.md#lopezdeprado).
+
+- <https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1821643>
+
+### Grinold & Kahn — *Active Portfolio Management* {#grinoldkahn}
+
+For the [Information
+ratio](11-portfolio-optimization.md#sharpes-cousins), the fundamental law of
+active management, and [factor
+models](11-portfolio-optimization.md#factor-analysis-what-a-stream-is-made-of) for
+risk decomposition.
+
+- <https://www.mhprofessional.com/active-portfolio-management-a-quantitative-approach-for-producing-superior-returns-and-controlling-risk-9780070248823-usa>
+
+### Andrew Ang — *Asset Management: A Systematic Approach to Factor Investing* {#ang}
+
+For [factor
+analysis](11-portfolio-optimization.md#factor-analysis-what-a-stream-is-made-of) as
+a way to characterize and commoditize the risk exposures embedded in a return
+stream, and the [alpha-vs-beta](11-portfolio-optimization.md#alpha-vs-beta)
+distinction.
+
+- <https://global.oup.com/academic/product/asset-management-9780199959327>
+
 ## Additional reference
 
 ### Investopedia — *Understanding an OHLC Chart* {#investopedia}

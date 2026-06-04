@@ -92,7 +92,7 @@ when the market is about to move against you), and **non-fill risk** (the trade
 you wanted never happens), all governed by your **cancellation rules**. Deciding
 where in the book to post to balance these is the central question in
 [Cartea et al.](sources.md#cartea) and [Harris](sources.md#harris). The
-[capstone](10-capstone.md#can-you-compare-market-order-and-limit-order-variants-of-the-same-signal)
+[homework](10-homework.md#can-you-compare-market-order-and-limit-order-variants-of-the-same-signal)
 asks you to compare both order types on the same signal precisely because the
 trade-off is not obvious in advance.
 
@@ -116,7 +116,7 @@ This is the engineering standard for an auditable execution layer, mirroring the
 [state](06-backtesting-engine.md#what-state-should-the-backtester-maintain) the
 event-driven engine already maintains ([QuantStart](sources.md#quantstart)). The
 feature-timestamp-versus-decision-timestamp pair is what lets you later produce the
-[no-future-data audit table](10-capstone.md#can-you-prove-the-system-does-not-use-future-data).
+[no-future-data audit table](10-homework.md#can-you-prove-the-system-does-not-use-future-data).
 
 ## How do you evaluate the strategy after execution costs?
 
@@ -130,7 +130,9 @@ every real cost and look beyond a single headline number. Compute:
 - **Fees and slippage** — commissions, exchange fees, and the difference between
   decision price and fill price.
 - **Drawdown** — worst peak-to-trough loss, the survivability measure.
-- **Sharpe-like statistics** — risk-adjusted return.
+- **Sharpe-like statistics** — [risk-adjusted
+  return](11-portfolio-optimization.md#why-risk-adjusted-return), the standard way
+  to compare strategies on a common footing.
 - **Hit rate and average win/loss** — how often you're right and the payoff
   asymmetry.
 - **Inventory exposure** — how much risk you carried to earn the return.
@@ -147,4 +149,4 @@ toward.
 ---
 
 Previous: **[← Feature engineering](08-feature-engineering.md)** · Next:
-**[Capstone system →](10-capstone.md)**
+**[Homework: build a standalone system →](10-homework.md)**

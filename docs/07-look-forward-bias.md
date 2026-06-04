@@ -106,7 +106,7 @@ detect it. Practical defenses: limit the number of trials, track how many you
 ran, prefer simple/economically-motivated strategies, hold out data you truly
 never touch, and discount in-sample performance accordingly. This connects to the
 honest evaluation discussed in [Section 9](09-prediction-to-actions.md#how-do-you-evaluate-the-strategy-after-execution-costs)
-and the audit in the [capstone](10-capstone.md#can-you-prove-the-system-does-not-use-future-data).
+and the audit in the [homework](10-homework.md#can-you-prove-the-system-does-not-use-future-data).
 
 ## How should validation be done for time series?
 
