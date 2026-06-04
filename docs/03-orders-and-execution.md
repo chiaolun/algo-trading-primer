@@ -80,6 +80,19 @@ becomes the new best bid, narrowing the spread from 2 ticks to 1. (Loops; respec
 reduced-motion.)</figcaption>
 </figure>
 
+The opposite case is a **marketable (crossing) limit order** — one priced at or
+*through* the other side of the book. Because the limit is only a **worst-acceptable
+price**, not the price you must pay, such an order executes immediately against the
+resting liquidity and fills at the *best available* prices, which can be **better
+than your limit**. Send a buy limit capped at 100.05 into a book whose best ask is
+100.03 and you buy at 100.03, not 100.05 — the 0.02 difference is **price
+improvement**. The limit only bites as a ceiling: it stops the order from
+[walking the book](#how-do-market-orders-interact-with-the-limit-order-book) past
+100.05 if the near offers are too thin, leaving any unfilled remainder to **rest** at
+your limit rather than paying through it. In this sense a limit order that crosses
+the spread is a [market order](#what-is-a-market-order) with a built-in slippage
+cap — immediacy when the price is acceptable, protection when it is not.
+
 The costs are subtler than a market order's:
 
 - **Queue position / non-execution risk.** A resting limit order only fills when
