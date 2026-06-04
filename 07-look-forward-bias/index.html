@@ -1,0 +1,999 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A self-study path to building a minimal, leakage-free futures backtester driven by a machine-learning signal.">
+      
+      
+      
+      
+        <link rel="prev" href="../06-backtesting-engine/">
+      
+      
+        <link rel="next" href="../08-feature-engineering/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>7. Look-forward bias & leakage - Algo Trading Wiki</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#7-look-forward-bias-leakage" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Algo Trading Wiki" class="md-header__button md-logo" aria-label="Algo Trading Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Algo Trading Wiki
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              7. Look-forward bias & leakage
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Algo Trading Wiki" class="md-nav__button md-logo" aria-label="Algo Trading Wiki" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Algo Trading Wiki
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-market-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Market structure & auctions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-futures-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Futures contracts & expiries
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-orders-and-execution/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Orders & execution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-market-data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Market data
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-bars-and-aggregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Bars & aggregation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-backtesting-engine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Backtesting engine design
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Look-forward bias & leakage
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Look-forward bias & leakage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-look-forward-bias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is look-forward bias?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-the-difference-between-event-time-exchange-time-receive-time-decision-time-and-execution-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is the difference between event time, exchange time, receive time, decision time, and execution time?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-is-same-bar-execution-dangerous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why is same-bar execution dangerous?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-can-continuous-futures-construction-leak-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How can continuous futures construction leak information?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-data-snooping-or-backtest-overfitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is data snooping or backtest overfitting?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-should-validation-be-done-for-time-series" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How should validation be done for time series?
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-feature-engineering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. Feature engineering & regression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-prediction-to-actions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. From prediction to actions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-capstone/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Capstone system
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sources/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-look-forward-bias" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is look-forward bias?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-the-difference-between-event-time-exchange-time-receive-time-decision-time-and-execution-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is the difference between event time, exchange time, receive time, decision time, and execution time?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#why-is-same-bar-execution-dangerous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why is same-bar execution dangerous?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-can-continuous-futures-construction-leak-information" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How can continuous futures construction leak information?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-data-snooping-or-backtest-overfitting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What is data snooping or backtest overfitting?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-should-validation-be-done-for-time-series" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How should validation be done for time series?
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="7-look-forward-bias-leakage">7. Look-forward bias &amp; leakage<a class="headerlink" href="#7-look-forward-bias-leakage" title="Permanent link">&para;</a></h1>
+<p>This is the section that separates a backtest you can act on from one that will
+quietly destroy capital. <strong>Look-forward bias</strong> (lookahead, leakage) is the use,
+in simulation, of information that would not have been available at that moment in
+live trading. It is the single most common reason a beautiful backtest fails in
+production. Every realism assumption from the <a href="../06-backtesting-engine/#what-assumptions-determine-backtest-realism">engine
+design</a> is
+ultimately a defense against it.</p>
+<p>The reference throughout is <a href="../sources/#lopezdeprado">López de Prado</a>, with
+<a href="../sources/#quantstart">QuantStart</a> on event-driven discipline.</p>
+<h2 id="what-is-look-forward-bias">What is look-forward bias?<a class="headerlink" href="#what-is-look-forward-bias" title="Permanent link">&para;</a></h2>
+<p><strong>Look-forward bias</strong> is using information in a simulation <em>before it would have
+been available</em> in real time. The backtest "peeks" at the future — even by a few
+seconds — and acts on knowledge the live system could not have had. Because the
+peeked-at information is correlated with the very outcome you are trying to
+predict, lookahead almost always <em>flatters</em> results, often dramatically.</p>
+<p>It is insidious because it usually arises from innocent-looking code, not
+deliberate cheating: joining a feature table on the wrong timestamp, using a
+revised data value instead of the originally-reported one, normalizing with
+statistics computed over the whole sample, or assuming a fill at a price that was
+only known later. <a href="../sources/#lopezdeprado">López de Prado</a> and
+<a href="../sources/#quantstart">QuantStart</a> both treat avoiding lookahead as a central
+design goal — and the event-driven architecture is partly a <em>structural</em> defense
+against it.</p>
+<h2 id="what-is-the-difference-between-event-time-exchange-time-receive-time-decision-time-and-execution-time">What is the difference between event time, exchange time, receive time, decision time, and execution time?<a class="headerlink" href="#what-is-the-difference-between-event-time-exchange-time-receive-time-decision-time-and-execution-time" title="Permanent link">&para;</a></h2>
+<p>Leakage is fundamentally a <strong>timestamp</strong> problem, so you must be precise about
+<em>which</em> time you mean. A single market occurrence carries several timestamps, and
+they are not equal:</p>
+<ul>
+<li><strong>Event time</strong> — when the thing happened in the world (e.g. an order matched).</li>
+<li><strong>Exchange time</strong> — when the exchange's matching engine recorded and stamped it.</li>
+<li><strong>Receive time</strong> — when <em>your</em> system actually received the message, after
+  network and feed-handler latency.</li>
+<li><strong>Decision time</strong> — when your strategy evaluates and chooses an action.</li>
+<li><strong>Execution time</strong> — when the resulting order reaches the exchange and fills.</li>
+</ul>
+<p>The discipline that prevents leakage: <strong>every feature and label must be tagged
+with an availability timestamp</strong>, and a decision at time <em>t</em> may only consume
+inputs whose availability time is <code>≤ t</code>. In live trading you can only act on
+<em>receive</em> time, never <em>exchange</em> time — so a backtest that uses exchange
+timestamps as if they were instantly available understates latency and leaks. This
+follows the internal data-model discipline and <a href="../sources/#databento">Databento's schema
+conventions</a> for the various timestamps.</p>
+<h2 id="why-is-same-bar-execution-dangerous">Why is same-bar execution dangerous?<a class="headerlink" href="#why-is-same-bar-execution-dangerous" title="Permanent link">&para;</a></h2>
+<p><strong>Same-bar execution</strong> is the most common lookahead bug. As established in
+<a href="../05-bars-and-aggregation/#why-can-bars-create-look-forward-risk">Section 5</a>, a
+bar's <strong>High, Low, Close, and Volume are only known when the bar closes.</strong> If you
+generate a signal from a bar's close — or worse, use its high/low — and then book
+a trade <em>within that same bar</em> (at its open, or at a favorable intrabar price),
+you have used end-of-interval information to act at the start of the interval. You
+are trading on the future.</p>
+<p>The damage is severe because the leaked quantities are exactly the ones most
+correlated with profit: knowing a bar's high before "buying at the open" lets the
+backtest sell at the peak it could not have foreseen. The fix is the rule from
+Section 5: <strong>decide on closed bars only, act on the next bar.</strong> <a href="../05-bars-and-aggregation/#what-is-an-ohlc-bar">OHLC
+definitions</a> make the timing
+explicit, and <a href="../sources/#lopezdeprado">López de Prado</a> catalogs same-bar
+execution among the backtesting dangers.</p>
+<h2 id="how-can-continuous-futures-construction-leak-information">How can continuous futures construction leak information?<a class="headerlink" href="#how-can-continuous-futures-construction-leak-information" title="Permanent link">&para;</a></h2>
+<p>Because <a href="../02-futures-contracts/#what-does-expiry-mean">futures expire</a>, analysts
+stitch successive contracts into a single <strong>continuous</strong> series — and that
+stitching is a sneaky leakage vector in two ways.</p>
+<p>First, <strong>roll selection</strong>: if you decide <em>which</em> contract is active using
+information that was not available in real time — say, picking the roll date by
+the day volume or open interest peaked, which you only know in hindsight — your
+<a href="../02-futures-contracts/#how-should-a-backtester-select-the-active-equity-index-futures-contract">active-contract series</a>
+encodes the future. The roll must be driven by a rule evaluable from
+<em>past</em> data only (or by a fixed schedule like the <a href="../sources/#cme">CME roll
+date</a>).</p>
+<p>Second, <strong>back-adjustment</strong>: to remove the price jump at each roll, continuous
+series are often <em>back-adjusted</em> — historical prices are shifted by the roll gap.
+But the size of that gap is only known <em>at</em> the roll, so a naively back-adjusted
+history embeds future roll information into past prices, and absolute price levels
+(and anything derived from them, like fixed-price thresholds) become
+contaminated. The safe approach is to define continuous-contract construction with
+<strong>historical availability</strong> in mind: only roll on past-observable signals, and be
+explicit about whether features use raw or adjusted prices.</p>
+<h2 id="what-is-data-snooping-or-backtest-overfitting">What is data snooping or backtest overfitting?<a class="headerlink" href="#what-is-data-snooping-or-backtest-overfitting" title="Permanent link">&para;</a></h2>
+<p><strong>Data snooping</strong> (backtest overfitting) is a leakage of a different kind — not
+through time, but through <em>repeated trial</em>. If you test many strategies, or tune
+many parameters, against the same historical data and keep the best, the winner's
+strong "out-of-sample" performance is partly luck that will not repeat. You have
+implicitly fit the noise of that specific history. The more configurations you
+try, the more inflated the apparent best result, even with no single-run
+lookahead.</p>
+<p><a href="../sources/#lopezdeprado">López de Prado's backtesting section</a> covers exactly
+this — the dangers of backtesting and the cross-validation methods meant to
+detect it. Practical defenses: limit the number of trials, track how many you
+ran, prefer simple/economically-motivated strategies, hold out data you truly
+never touch, and discount in-sample performance accordingly. This connects to the
+honest evaluation discussed in <a href="../09-prediction-to-actions/#how-do-you-evaluate-the-strategy-after-execution-costs">Section 9</a>
+and the audit in the <a href="../10-capstone/#can-you-prove-the-system-does-not-use-future-data">capstone</a>.</p>
+<h2 id="how-should-validation-be-done-for-time-series">How should validation be done for time series?<a class="headerlink" href="#how-should-validation-be-done-for-time-series" title="Permanent link">&para;</a></h2>
+<p>Standard random <strong>K-fold</strong> cross-validation is <em>wrong</em> for trading data, for two
+reasons: it trains on future data to predict the past (lookahead), and overlapping
+labels let information bleed between folds. Time-series validation must respect the
+arrow of time:</p>
+<ul>
+<li><strong>Chronological splits</strong> — always train on the past and test on a later,
+  strictly subsequent period.</li>
+<li><strong>Walk-forward testing</strong> — repeatedly train up to time <em>t</em>, test on the next
+  window, then roll <em>t</em> forward, mimicking how a model is periodically retrained
+  live.</li>
+<li><strong>Purging</strong> — drop training samples whose label horizon overlaps the test
+  period, so a label that "knows" about the test window cannot leak into training.</li>
+<li><strong>Embargoing</strong> — additionally exclude a buffer of samples immediately after the
+  test period to block serial-correlation leakage across the boundary.</li>
+<li><strong>Avoid random K-fold when labels overlap</strong> — overlapping multi-step return
+  labels share information across folds and break the i.i.d. assumption K-fold
+  relies on.</li>
+</ul>
+<p>These methods come from <a href="../sources/#lopezdeprado">López de Prado</a> and the broader
+purged-cross-validation literature (<a href="../sources/#overfitting-paper">overfitting in the ML
+era</a>). They are what make <a href="../08-feature-engineering/#what-is-the-prediction-target">Section 8's
+labels</a> evaluable without
+fooling yourself.</p>
+<hr />
+<p>Previous: <strong><a href="../06-backtesting-engine/">← Backtesting engine</a></strong> · Next: <strong><a href="../08-feature-engineering/">Feature
+engineering &amp; regression framing →</a></strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../06-backtesting-engine/" class="md-footer__link md-footer__link--prev" aria-label="Previous: 6. Backtesting engine design">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                6. Backtesting engine design
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../08-feature-engineering/" class="md-footer__link md-footer__link--next" aria-label="Next: 8. Feature engineering &amp; regression">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                8. Feature engineering & regression
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "navigation.indexes", "navigation.footer", "content.code.copy", "toc.follow", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
