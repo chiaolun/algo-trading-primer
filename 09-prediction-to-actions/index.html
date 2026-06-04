@@ -832,16 +832,115 @@ have right now. The mapping typically combines:</p>
 enough to capture edge but stable enough not to be eaten by trading costs.
 <a href="../sources/#cs7646">CS 7646</a> and <a href="../sources/#jansen">Jansen</a> both treat this
 forecast-to-position step.</p>
-<p>A rigorous version of this trade-off is worked out by <a href="../sources/#garleanu-pedersen">Gârleanu and
-Pedersen</a>: when trading is costly, the optimal policy
-is <em>not</em> to jump to the current <a href="../11-portfolio-optimization/#markowitz-mean-variance-optimization">Markowitz-optimal</a>
-position but to take a <strong>partial step</strong> toward an <em>aim portfolio</em> each period. The
-aim is not today's static optimum but a forward-looking blend that weights each
-predictive signal by its <strong>persistence</strong> — trade hard toward edges that will still
-be there tomorrow (slow-decaying signals) and only lightly toward fast-decaying ones
-whose alpha would be gone before you finished paying to capture it. The size of the
-step trades expected alpha and risk against transaction costs, which is the
-principled generalization of the static no-trade band above.</p>
+<p>A crucial input to this trade-off is <strong>alpha decay</strong> — the edge lost to the delay
+between when a signal fires and when you actually execute; the longer you wait, the
+more of the edge is gone. Decay rates vary by strategy and dictate how to trade. A
+fast-decaying signal (often high-Sharpe but low-capacity, e.g. statistical
+arbitrage) must be traded <em>aggressively</em> to capture its edge before it evaporates,
+incurring more market impact and <a href="#how-do-you-evaluate-the-strategy-after-execution-costs">transaction
+costs</a>; a slow-decaying
+signal (moderate-Sharpe, higher-capacity, e.g. macro or long/short equity) can be
+worked <em>patiently</em> at far lower cost. The real objective is to <strong>maximize net
+alpha</strong> — gross alpha minus trading costs: trade too fast and impact eats the edge,
+trade too slowly and decay does, and there is a "just right" speed in between that
+depends on the decay rate relative to the cost of trading. AQR's <a href="../sources/#aqr-transaction-costs"><em>Transactions
+Costs: Practical Application</em></a> works through this
+balancing act.</p>
+<p>The first picture is decay itself — different strategies bleed their edge at very
+different rates:</p>
+<figure style="margin:1.5rem auto;text-align:center">
+<svg viewBox="0 0 640 400" role="img" aria-label="Alpha decay curves for a fast- and a slow-decaying signal" style="max-width:100%;height:auto;color:var(--md-default-fg-color)">
+  <title>Different strategies exhibit different alpha decay rates</title>
+  <!-- axes -->
+  <line x1="60" y1="30" x2="60" y2="350" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+  <line x1="60" y1="350" x2="620" y2="350" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+  <!-- y ticks + labels -->
+  <g stroke="currentColor" stroke-width="1" opacity="0.5">
+    <line x1="56" y1="350" x2="60" y2="350"/><line x1="56" y1="270" x2="60" y2="270"/>
+    <line x1="56" y1="190" x2="60" y2="190"/><line x1="56" y1="110" x2="60" y2="110"/>
+    <line x1="56" y1="30" x2="60" y2="30"/>
+  </g>
+  <g fill="currentColor" font-size="12" opacity="0.75" text-anchor="end">
+    <text x="52" y="354">0.0</text><text x="52" y="274">0.4</text>
+    <text x="52" y="194">0.8</text><text x="52" y="114">1.2</text><text x="52" y="34">1.6</text>
+  </g>
+  <!-- x ticks + labels -->
+  <g fill="currentColor" font-size="12" opacity="0.75" text-anchor="middle">
+    <text x="60" y="368">0</text><text x="247" y="368">10</text>
+    <text x="433" y="368">20</text><text x="620" y="368">30</text>
+  </g>
+  <!-- axis titles -->
+  <text x="340" y="392" fill="currentColor" font-size="12.5" opacity="0.85" text-anchor="middle">Days between signal and execution</text>
+  <text x="18" y="190" fill="currentColor" font-size="12.5" opacity="0.85" text-anchor="middle" transform="rotate(-90 18 190)">Gross Sharpe ratio</text>
+  <!-- slow-decaying signal -->
+  <polyline fill="none" stroke="#14b8a6" stroke-width="2.5" points="60,230 200,233 340,238 480,242 620,246"/>
+  <!-- fast-decaying signal -->
+  <polyline fill="none" stroke="#6366f1" stroke-width="2.5" points="60,50 97,170 135,250 172,294 209,320 247,336 300,344 340,346 620,350"/>
+  <!-- inline labels -->
+  <text x="150" y="120" fill="#6366f1" font-size="12.5" font-weight="600">Fast decay (e.g. stat-arb)</text>
+  <text x="350" y="225" fill="#14b8a6" font-size="12.5" font-weight="600">Slow decay (e.g. macro)</text>
+</svg>
+<figcaption style="font-size:0.8rem;opacity:0.8">A fast-decaying, high-Sharpe signal is nearly gone within days; a slow-decaying
+signal holds its edge for weeks. Original illustration of the concept in
+<a href="https://www.aqr.com/Insights/Research/White-Papers/Transactions-Costs-Practical-Application">AQR, <em>Transactions Costs: Practical Application</em></a> (Exhibit 4).</figcaption>
+</figure>
+
+<p>The second picture is the consequence — because trading faster costs more market
+impact while waiting forfeits decaying alpha, <strong>net</strong> alpha (gross minus cost) is
+humped, peaking at an intermediate trading speed:</p>
+<figure style="margin:1.5rem auto;text-align:center">
+<svg viewBox="0 0 640 400" role="img" aria-label="Gross alpha, transaction cost, and net alpha versus trading speed" style="max-width:100%;height:auto;color:var(--md-default-fg-color)">
+  <title>Trading skill is about maximizing net alpha</title>
+  <!-- axes -->
+  <line x1="60" y1="30" x2="60" y2="350" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+  <line x1="60" y1="350" x2="620" y2="350" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+  <!-- y ticks + labels -->
+  <g stroke="currentColor" stroke-width="1" opacity="0.5">
+    <line x1="56" y1="350" x2="60" y2="350"/><line x1="56" y1="243" x2="60" y2="243"/>
+    <line x1="56" y1="137" x2="60" y2="137"/><line x1="56" y1="30" x2="60" y2="30"/>
+  </g>
+  <g fill="currentColor" font-size="12" opacity="0.75" text-anchor="end">
+    <text x="52" y="354">0.0</text><text x="52" y="247">0.2</text>
+    <text x="52" y="141">0.4</text><text x="52" y="34">0.6</text>
+  </g>
+  <!-- x end labels -->
+  <g fill="currentColor" font-size="12" opacity="0.75">
+    <text x="60" y="368" text-anchor="start">fast / aggressive</text>
+    <text x="620" y="368" text-anchor="end">slow / patient</text>
+  </g>
+  <text x="340" y="392" fill="currentColor" font-size="12.5" opacity="0.85" text-anchor="middle">Time taken to complete the trade</text>
+  <text x="18" y="190" fill="currentColor" font-size="12.5" opacity="0.85" text-anchor="middle" transform="rotate(-90 18 190)">Alpha (%)</text>
+  <!-- gross alpha -->
+  <polyline fill="none" stroke="#6366f1" stroke-width="2.5" points="60,83 200,99 368,115 508,126 620,131"/>
+  <!-- transaction cost -->
+  <polyline fill="none" stroke="#f59e0b" stroke-width="2.5" points="60,243 200,291 368,323 508,323 620,323"/>
+  <!-- net alpha -->
+  <polyline fill="none" stroke="#14b8a6" stroke-width="3" points="60,190 200,158 368,142 508,153 620,158"/>
+  <!-- markers on net curve -->
+  <g fill="#14b8a6">
+    <circle cx="60" cy="190" r="4"/><circle cx="368" cy="142" r="4.5"/><circle cx="620" cy="158" r="4"/>
+  </g>
+  <g font-size="12" fill="currentColor" opacity="0.9">
+    <text x="72" y="184">too fast</text>
+    <text x="368" y="130" text-anchor="middle" font-weight="600" fill="#14b8a6">just right</text>
+    <text x="612" y="152" text-anchor="end">too slow</text>
+  </g>
+  <!-- legend -->
+  <g font-size="12.5" font-weight="600">
+    <line x1="400" y1="58" x2="424" y2="58" stroke="#6366f1" stroke-width="2.5"/>
+    <text x="430" y="62" fill="#6366f1">Gross alpha</text>
+    <line x1="400" y1="78" x2="424" y2="78" stroke="#f59e0b" stroke-width="2.5"/>
+    <text x="430" y="82" fill="#f59e0b">Transaction cost</text>
+    <line x1="400" y1="98" x2="424" y2="98" stroke="#14b8a6" stroke-width="3"/>
+    <text x="430" y="102" fill="#14b8a6">Net alpha</text>
+  </g>
+</svg>
+<figcaption style="font-size:0.8rem;opacity:0.8">Net alpha is maximized at an intermediate speed: trade too fast and market impact
+eats the edge; trade too slowly and alpha decays away. Original illustration of the
+concept in
+<a href="https://www.aqr.com/Insights/Research/White-Papers/Transactions-Costs-Practical-Application">AQR, <em>Transactions Costs: Practical Application</em></a> (Exhibit 7).</figcaption>
+</figure>
+
 <h2 id="how-does-a-target-position-become-orders">How does a target position become orders?<a class="headerlink" href="#how-does-a-target-position-become-orders" title="Permanent link">&para;</a></h2>
 <p>Orders come from the <strong>difference</strong> between your current position and your target
 position. If you hold +2 and want +5, you must buy 3; if you hold +2 and want 0,
