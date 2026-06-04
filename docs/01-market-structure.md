@@ -249,7 +249,7 @@ orders first, so an order at the back fills only once everyone ahead of it has:
 <figcaption style="font-size:0.8rem;opacity:0.8">At one price the queue is first-in, first-out. Incoming sells take the oldest orders
 first (1st, then 2nd, then 3rd); <strong>YOU</strong>, at the back, fill only once
 everyone who arrived earlier has traded. Same price, very different fill order — which
-is why queue position matters. (Loops; respects reduced-motion.)</figcaption>
+is why queue position matters.</figcaption>
 </figure>
 
 ## What makes a market liquid?

@@ -154,8 +154,7 @@ shows.
 </svg>
 <figcaption style="font-size:0.8rem;opacity:0.8">The only order resting at the best ask (100.03) is cancelled — pulled with no trade,
 so nothing prints on the tape. The best ask steps up to 100.04 and the spread widens
-from 0.02 to 0.03. Trade data would show none of this; L2 shows it plainly. (Loops;
-respects reduced-motion.)</figcaption>
+from 0.02 to 0.03. Trade data would show none of this; L2 shows it plainly.</figcaption>
 </figure>
 
 ## What can trade data show that level-two snapshots may not?

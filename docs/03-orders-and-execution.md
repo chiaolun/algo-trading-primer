@@ -76,8 +76,7 @@ Posted inside the spread it even becomes the new best bid, tightening the market
 </svg>
 <figcaption style="font-size:0.8rem;opacity:0.8">A limit buy for 60 priced at 100.02 sits below the best ask (100.03), so it cannot
 trade. It rests in the book — and because 100.02 beats the old best bid of 100.01, it
-becomes the new best bid, narrowing the spread from 2 ticks to 1. (Loops; respects
-reduced-motion.)</figcaption>
+becomes the new best bid, narrowing the spread from 2 ticks to 1.</figcaption>
 </figure>
 
 The opposite case is a **marketable (crossing) limit order** — one priced at or
@@ -141,8 +140,7 @@ cap — immediacy when the price is acceptable, protection when it is not.
 <figcaption style="font-size:0.8rem;opacity:0.8">A 200-lot buy limit capped at 100.05 crosses the spread. It takes 70 at 100.03 and
 90 at 100.04 — both <em>better</em> than the 100.05 limit (price improvement). With no
 more liquidity at or below the cap, the order stops: the remaining 40 <strong>rests</strong>
-at 100.05 rather than paying the 100.06 offer, which the cap leaves untouched. (Loops;
-respects reduced-motion.)</figcaption>
+at 100.05 rather than paying the 100.06 offer, which the cap leaves untouched.</figcaption>
 </figure>
 
 The costs are subtler than a market order's:
@@ -243,7 +241,7 @@ a higher best ask behind.
 <figcaption style="font-size:0.8rem;opacity:0.8">A 150-lot market buy is larger than the 75 resting at the best ask (100.03). It
 takes all 75 there, then walks up to 100.04 for the remaining 75 — executing at two
 prices for an average of 100.034 (one tick of slippage) and leaving 100.04 as the
-new best ask. (Animation loops; it respects <em>reduced-motion</em> settings.)</figcaption>
+new best ask.</figcaption>
 </figure>
 
 ## What is a partial fill?
@@ -302,8 +300,7 @@ trades and the balance keeps its place in the queue:
 <figcaption style="font-size:0.8rem;opacity:0.8">Your resting buy displays 100 lots. A sell for only 40 arrives, so 40 of your order
 fills and the remaining 60 stays put — keeping its place in the
 <a href="../01-market-structure/#how-does-price-time-priority-work">queue</a>.
-Tracking that remaining quantity is essential to a realistic fill model. (Loops;
-respects reduced-motion.)</figcaption>
+Tracking that remaining quantity is essential to a realistic fill model.</figcaption>
 </figure>
 
 ## What assumptions are needed to simulate limit order fills?
