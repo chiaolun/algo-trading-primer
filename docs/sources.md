@@ -98,15 +98,15 @@ execution, VWAP schedules, pairs trading, and dark pools.
   <https://assets.cambridge.org/97811070/91146/frontmatter/9781107091146_frontmatter.pdf>
 - Overview: <https://books.google.nl/books?id=5dMmCgAAQBAJ>
 
-### Gârleanu & Pedersen — *Dynamic Trading with Predictable Returns and Transaction Costs* {#garleanu-pedersen}
+### Hedayati, Hurst & Stamelos — *Transactions Costs: Practical Application* {#aqr-transaction-costs}
 
-For turning [predictions into
-positions](09-prediction-to-actions.md#how-does-a-prediction-become-a-position) when
-trading is costly: the optimal policy trades *partially* toward an "aim portfolio"
-that weights each signal by its persistence, rather than jumping to the static
-optimum. *Journal of Finance* (2013).
+On the practical side of turning [predictions into
+positions](09-prediction-to-actions.md#how-does-a-prediction-become-a-position): how
+transaction costs interact with **alpha decay** — a fast-fading signal must be traded
+aggressively and expensively, a slow one patiently and cheaply — and the nuances of
+measuring trading costs when comparing managers. AQR white paper (2018).
 
-- <https://www.aqr.com/Insights/Research/Journal-Article/Dynamic-Trading-With-Predictable-Returns-and-Transactions-Costs>
+- <https://www.aqr.com/Insights/Research/White-Papers/Transactions-Costs-Practical-Application>
 
 ### Stefan Jansen, *Machine Learning for Algorithmic Trading* {#jansen}
 
