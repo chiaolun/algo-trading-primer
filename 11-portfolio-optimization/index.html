@@ -1311,6 +1311,28 @@ indiscriminately and sell whatever they can. This <strong>tail dependence</stron
 correlation matrix you estimated in calm markets describes a different world than
 the one you face when it matters, and the risk reduction you counted on
 <strong>evaporates exactly when you need it most.</strong></p>
+<p>Here the two covariance estimators from <a href="#what-it-means-for-a-factor-model-to-work">factor analysis</a>
+behave very differently, and the factor-derived one is far better equipped to <em>model</em>
+this behavior. The <strong>sample covariance</strong> is just a backward-looking average of
+realized co-movement: it has no structural handle on "all correlations rise
+together," so it cannot represent the regime until it has actually lived through the
+crisis, and even then a calm trailing window dilutes the spike. The
+<strong>factor-derived covariance</strong> <span class="arithmatex">\(\Sigma = B\,\Sigma_f\,B^\top + D\)</span> — loadings <span class="arithmatex">\(B\)</span>, a
+small factor covariance <span class="arithmatex">\(\Sigma_f\)</span>, and diagonal idiosyncratic variances <span class="arithmatex">\(D\)</span> — has
+the crisis mechanism built in. Correlations going to 1 <em>is</em> the systematic factor's
+variance swamping idiosyncratic risk: for two assets that both load on a common
+factor with variance <span class="arithmatex">\(\sigma_f^2\)</span>,</p>
+<div class="arithmatex">\[ \operatorname{Corr}(r_1, r_2) = \frac{\beta_1\beta_2\,\sigma_f^2}
+{\sqrt{(\beta_1^2\sigma_f^2 + \sigma_{\varepsilon_1}^2)(\beta_2^2\sigma_f^2 + \sigma_{\varepsilon_2}^2)}}
+\;\xrightarrow[\;\sigma_f^2 \to \infty\;]{}\; 1. \]</div>
+<p>As the common factor's volatility explodes, the idiosyncratic terms <span class="arithmatex">\(\sigma_\varepsilon^2\)</span>
+become negligible and the implied correlation between any two assets with same-sign
+loadings is driven to 1 — exactly the flight-to-risk-off behavior, where everything
+is suddenly dominated by one systematic shock. So a factor model lets you <strong>stress
+this regime with a single knob</strong>: scale up the factor variance and watch the whole
+correlation matrix migrate toward 1, coherently and across every pair at once,
+without re-estimating thousands of pairwise correlations. The sample covariance
+offers no such lever.</p>
 <p>This is the deepest caveat of the whole section: the mean-variance characterization
 is a calm-weather instrument, and its single number for "how these move together"
 hides a regime switch. The defensive lessons follow directly — <strong>stress-test</strong>
