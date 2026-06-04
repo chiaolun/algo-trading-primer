@@ -843,6 +843,70 @@ orders move the market. Databento's L2 schema is defined precisely to capture
 this — trades together with aggregated book-depth updates
 (<a href="../sources/#databento">Databento</a>) — which is what lets you reconstruct how an
 order would have swept the book.</p>
+<p>The animation below shows it: a market buy larger than the best-ask level sweeps up
+through two price levels, executing at a worse average price (slippage) and leaving
+a higher best ask behind.</p>
+<figure style="margin:1.5rem 0;width:100%">
+<svg viewBox="0 0 680 268" role="img" aria-label="Animation of a large market buy order walking up through several ask price levels" style="width:100%;height:auto;display:block;color:var(--md-default-fg-color)">
+  <title>A market order larger than the top level walks the book</title>
+  <style>
+    .mkwo-stage{animation:mkwo-stage 9s infinite}
+    .mkwo-bar{transform-box:fill-box;transform-origin:left center}
+    .mkwo-b3{animation:mkwo-b3 9s infinite}
+    .mkwo-b4{animation:mkwo-b4 9s infinite}
+    .mkwo-arrow{animation:mkwo-arrow 9s infinite}
+    .mkwo-n3{animation:mkwo-n3 9s infinite}
+    .mkwo-n4a{animation:mkwo-n4a 9s infinite}
+    .mkwo-n4b{animation:mkwo-n4b 9s infinite}
+    .mkwo-pa{animation:mkwo-pa 9s infinite}
+    .mkwo-f1{animation:mkwo-f1 9s infinite}
+    .mkwo-f2{animation:mkwo-f2 9s infinite}
+    .mkwo-sum{animation:mkwo-sum 9s infinite}
+    @keyframes mkwo-stage{0%,86%{opacity:1}90%,95%{opacity:0}99%,100%{opacity:1}}
+    @keyframes mkwo-b3{0%,18%{transform:scaleX(1)}26%,89%{transform:scaleX(0)}92%,100%{transform:scaleX(1)}}
+    @keyframes mkwo-b4{0%,30%{transform:scaleX(1)}40%,89%{transform:scaleX(.318)}92%,100%{transform:scaleX(1)}}
+    @keyframes mkwo-arrow{0%,26%{transform:translateY(0)}40%,86%{transform:translateY(-40px)}92%,100%{transform:translateY(0)}}
+    @keyframes mkwo-n3{0%,18%{opacity:1}26%,90%{opacity:0}93%,100%{opacity:1}}
+    @keyframes mkwo-n4a{0%,30%{opacity:1}40%,90%{opacity:0}93%,100%{opacity:1}}
+    @keyframes mkwo-n4b{0%,30%{opacity:0}40%,86%{opacity:1}90%,100%{opacity:0}}
+    @keyframes mkwo-pa{0%,18%{opacity:1}24%,90%{opacity:0}93%,100%{opacity:1}}
+    @keyframes mkwo-f1{0%,20%{opacity:0}26%,86%{opacity:1}90%,100%{opacity:0}}
+    @keyframes mkwo-f2{0%,34%{opacity:0}40%,86%{opacity:1}90%,100%{opacity:0}}
+    @keyframes mkwo-sum{0%,46%{opacity:0}52%,86%{opacity:1}90%,100%{opacity:0}}
+    @media (prefers-reduced-motion:reduce){.mkwo-stage,.mkwo-b3,.mkwo-b4,.mkwo-arrow,.mkwo-n3,.mkwo-n4a,.mkwo-n4b,.mkwo-pa,.mkwo-f1,.mkwo-f2,.mkwo-sum{animation:none}}
+  </style>
+  <g class="mkwo-stage">
+    <text x="340" y="20" text-anchor="middle" font-size="13" font-weight="600" fill="currentColor">Market BUY 150 lots — larger than the best-ask size, so it walks the book</text>
+    <g font-size="13" font-weight="600" text-anchor="end">
+      <text x="120" y="68" fill="#e5484d">100.05</text>
+      <text x="120" y="108" fill="#e5484d">100.04</text>
+      <text x="120" y="148" fill="#e5484d">100.03</text>
+      <text x="120" y="204" fill="#2ca35e">100.01</text>
+    </g>
+    <rect x="140" y="52" width="174.5" height="24" fill="#e5484d" opacity="0.3"/>
+    <text x="150" y="68" font-size="12.5" fill="currentColor">60</text>
+    <rect class="mkwo-bar mkwo-b4" x="140" y="92" width="320" height="24" fill="#e5484d" opacity="0.3"/>
+    <text class="mkwo-n4a" x="150" y="108" font-size="12.5" fill="currentColor">110</text>
+    <text class="mkwo-n4b" x="150" y="108" font-size="12.5" font-weight="600" fill="currentColor">35</text>
+    <rect class="mkwo-bar mkwo-b3" x="140" y="132" width="218" height="24" fill="#e5484d" opacity="0.3"/>
+    <text class="mkwo-n3" x="150" y="148" font-size="12.5" fill="currentColor">75</text>
+    <text class="mkwo-pa" x="366" y="148" font-size="12" fill="#e5484d">← best ask</text>
+    <rect x="140" y="188" width="261.8" height="24" fill="#2ca35e" opacity="0.3"/>
+    <text x="150" y="204" font-size="12.5" fill="currentColor">90</text>
+    <g class="mkwo-arrow" fill="#0ea5e9">
+      <path d="M124,137 L124,151 L138,144 Z"/>
+    </g>
+    <text class="mkwo-f1" x="480" y="148" font-size="12.5" fill="currentColor">✓ 75 filled @ 100.03</text>
+    <text class="mkwo-f2" x="480" y="108" font-size="12.5" fill="currentColor">✓ 75 filled @ 100.04</text>
+    <text class="mkwo-sum" x="140" y="246" font-size="12.5" font-weight="600" fill="currentColor">Filled 150 @ avg 100.034 — 1 tick of slippage; new best ask 100.04 (35 left)</text>
+  </g>
+</svg>
+<figcaption style="font-size:0.8rem;opacity:0.8">A 150-lot market buy is larger than the 75 resting at the best ask (100.03). It
+takes all 75 there, then walks up to 100.04 for the remaining 75 — executing at two
+prices for an average of 100.034 (one tick of slippage) and leaving 100.04 as the
+new best ask. (Animation loops; it respects <em>reduced-motion</em> settings.)</figcaption>
+</figure>
+
 <h2 id="what-is-a-partial-fill">What is a partial fill?<a class="headerlink" href="#what-is-a-partial-fill" title="Permanent link">&para;</a></h2>
 <p>A <strong>partial fill</strong> occurs when only part of an order executes and the rest
 remains. There are two common causes. For a <strong>marketable</strong> order, the size
